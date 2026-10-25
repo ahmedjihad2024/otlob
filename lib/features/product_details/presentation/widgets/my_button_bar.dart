@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/color_manager.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 class MyButtonBar extends StatelessWidget {
   const MyButtonBar({
@@ -24,7 +24,7 @@ class MyButtonBar extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-            horizontal: AppSizes.padding,
+            horizontal: SizeM.pagePadding,
             vertical: 16,
           ) +
           EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
@@ -85,7 +85,7 @@ class MyButtonBar extends StatelessWidget {
                 IconButton(
                   onPressed: onIncrease,
                   style: IconButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: ColorM.primary,
                     fixedSize: const Size(36, 36),
                     padding: EdgeInsets.zero,
                     elevation: 1,
@@ -104,9 +104,9 @@ class MyButtonBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onAddToCart,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: ColorM.primary,
                 elevation: 6,
-                shadowColor: AppColors.primary.withValues(alpha: .35),
+                shadowColor: ColorM.primary.withValues(alpha: .35),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),

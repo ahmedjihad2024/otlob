@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/color_manager.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 class Price extends StatelessWidget {
   const Price({super.key});
@@ -8,7 +8,7 @@ class Price extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.padding),
+      padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -18,7 +18,7 @@ class Price extends StatelessWidget {
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: AppColors.primary,
+              color: ColorM.primary,
             ),
           ),
           SizedBox(width: 6),

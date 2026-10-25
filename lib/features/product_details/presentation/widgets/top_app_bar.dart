@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
-import 'package:otlob/core/res/assets.dart';
+import 'package:otlob/core/extensions/navigation_extension.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
+import 'package:otlob/core/res/gen/assets.gen.dart';
 
 class TopAppBar extends StatelessWidget {
   const TopAppBar({
@@ -16,16 +17,16 @@ class TopAppBar extends StatelessWidget {
     return Stack(
       children: [
         Image.asset(
-          AppAssets.glazedDonuts,
+          Assets.images.glazedDonuts.path,
           width: double.infinity,
           height: 382,
           fit: BoxFit.cover,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.padding) +
+          padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding) +
               EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 12),
           child: IconButton(
-            onPressed: onBackPressed ?? () => Navigator.of(context).maybePop(),
+            onPressed: onBackPressed ?? () => context.maybePop(),
             style: IconButton.styleFrom(
               backgroundColor: Colors.black.withValues(alpha: .4),
               fixedSize: const Size(40, 40),

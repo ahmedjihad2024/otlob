@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
 
 class SortChips extends StatelessWidget {
   const SortChips({
@@ -22,6 +21,8 @@ class SortChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Color(0xFFFF5C39);
+
     return SizedBox(
       height: 42,
       child: ListView.separated(
@@ -38,7 +39,7 @@ class SortChips extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? primaryColor : Colors.white,
                 borderRadius: BorderRadius.circular(999),
                 boxShadow: [
                   BoxShadow(

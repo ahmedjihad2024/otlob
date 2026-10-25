@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/color_manager.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 class ProductTypeSelector extends StatelessWidget {
   const ProductTypeSelector({
@@ -15,7 +15,7 @@ class ProductTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+      padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       scrollDirection: Axis.horizontal,
       child: Row(
         spacing: 8,
@@ -65,7 +65,7 @@ class ProductTypeCard extends StatelessWidget {
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             letterSpacing: 0.275,
-            color: isSelected ? AppColors.primary : const Color(0xFF6B7280),
+            color: isSelected ? ColorM.primary : const Color(0xFF6B7280),
           ),
         ),
       ),

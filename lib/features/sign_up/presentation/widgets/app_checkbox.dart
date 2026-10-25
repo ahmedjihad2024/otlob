@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
+import 'package:otlob/core/res/color_manager.dart';
 
 
 class AppCheckbox extends StatelessWidget {
@@ -25,10 +25,10 @@ class AppCheckbox extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: AppColors.socialBorder),
+          border: Border.all(color: ColorM.socialBorder),
         ),
         child: value
-            ? const Icon(Icons.check, size: 14, color: AppColors.ink)
+            ? const Icon(Icons.check, size: 14, color: ColorM.ink)
             : null,
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:otlob/core/res/app_sizes.dart';
-import 'package:otlob/core/res/assets.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
+import 'package:otlob/core/res/gen/assets.gen.dart';
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({
@@ -26,7 +26,7 @@ class MyAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.padding),
+      padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       child: Column(
         crossAxisAlignment: .start,
         children: [
@@ -68,7 +68,7 @@ class MyAppBar extends StatelessWidget {
                   alignment: .center,
                   clipBehavior: Clip.none,
                   children: [
-                    SvgPicture.asset(AppAssets.bellIcon, width: 20, height: 20),
+                    SvgPicture.asset(Assets.svg.bellIcon.path, width: 20, height: 20),
 
                     if (isThereIsNotifications)
                       Positioned(
@@ -107,7 +107,7 @@ class MyAppBar extends StatelessWidget {
                 spacing: 8,
                 children: [
                   SvgPicture.asset(
-                    AppAssets.locationPin,
+                    Assets.svg.locationPin.path,
                     width: 13,
                     height: 13,
                   ),
@@ -148,7 +148,7 @@ class MyAppBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    SvgPicture.asset(AppAssets.searchIcon, width: 16, height: 16),
+                    SvgPicture.asset(Assets.svg.searchIcon.path, width: 16, height: 16),
                     const SizedBox(width: 10),
                     const Expanded(
                       child: Text(
@@ -172,7 +172,7 @@ class MyAppBar extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: SvgPicture.asset(
-                          AppAssets.filterIcon,
+                          Assets.svg.filterIcon.path,
                           width: 12,
                           height: 12,
                         ),

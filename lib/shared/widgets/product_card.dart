@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ProductItem {
-  final String id;
-  final String brand;
-  final String title;
-  final String category;
-  final double price;
-  final String imageAsset;
-
-  const ProductItem({
-    required this.id,
-    required this.brand,
-    required this.title,
-    required this.category,
-    required this.price,
-    required this.imageAsset,
-  });
-}
+export 'package:otlob/shared/products/domain/model/product_item.dart';
+import 'package:otlob/shared/products/domain/model/product_item.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -67,17 +52,30 @@ class ProductCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      product.imageAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                        color: const Color(0xFFF3F4F6),
-                        child: const Icon(
-                          Icons.image_not_supported_outlined,
-                          color: Color(0xFF9CA3AF),
-                        ),
-                      ),
-                    ),
+                    product.imageAsset.startsWith('http://') ||
+                            product.imageAsset.startsWith('https://')
+                        ? Image.network(
+                            product.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Container(
+                              color: const Color(0xFFF3F4F6),
+                              child: const Icon(
+                                Icons.image_not_supported_outlined,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
+                          )
+                        : Image.asset(
+                            product.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Container(
+                              color: const Color(0xFFF3F4F6),
+                              child: const Icon(
+                                Icons.image_not_supported_outlined,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
+                          ),
                     if (displayBadge.isNotEmpty)
                       Positioned(
                         top: isFilterStyle ? 6 : 10,

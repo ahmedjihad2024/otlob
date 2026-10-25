@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/extensions/navigation_extension.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 import 'package:otlob/features/explore_products/presentation/screens/explore_products_screen.dart';
 
 import '../widgets/explore_brands_list.dart';
@@ -29,7 +30,7 @@ class _ExploreTabScreenState extends State<ExploreTabScreen>
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.padding,
+            horizontal: SizeM.pagePadding,
             vertical: 16,
           ),
           child: Column(
@@ -39,12 +40,12 @@ class _ExploreTabScreenState extends State<ExploreTabScreen>
               const SizedBox(height: 24),
               ExploreCategoriesGrid(
                 onSelectCategory: (category) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ExploreProductsScreen(
-                        title: category.name,
-                        category: category.name,
-                      ),
+                  context.pushNamed(
+                    Routes.products,
+                    arguments: ExploreProductsArgs(
+                      title: category.name,
+                      explorType: ExplorType.categories,
+                      id: int.tryParse(category.id),
                     ),
                   );
                 },
@@ -52,12 +53,12 @@ class _ExploreTabScreenState extends State<ExploreTabScreen>
               const SizedBox(height: 24),
               ExploreBrandsList(
                 onSelectBrand: (brand) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ExploreProductsScreen(
-                        title: brand.name,
-                        brand: brand.name,
-                      ),
+                  context.pushNamed(
+                    Routes.products,
+                    arguments: ExploreProductsArgs(
+                      title: brand.name,
+                      explorType: ExplorType.brands,
+                      id: int.tryParse(brand.id),
                     ),
                   );
                 },

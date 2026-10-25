@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:otlob/core/res/assets.dart';
+import 'package:otlob/core/res/gen/assets.gen.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   const HomeBottomNavBar({
@@ -42,28 +42,28 @@ class HomeBottomNavBar extends StatelessWidget {
             children: [
               _buildNavItem(
                 index: 0,
-                iconAsset: AppAssets.navHome,
+                iconAsset: Assets.svg.navHome.path,
                 label: "Home",
               ),
               _buildNavItem(
                 index: 1,
-                iconAsset: AppAssets.navExplore,
+                iconAsset: Assets.svg.navExplore.path,
                 label: "Explore",
               ),
               _buildNavItem(
                 index: 2,
-                iconAsset: AppAssets.navCart,
+                iconAsset: Assets.svg.navCart.path,
                 label: "Cart",
                 badgeCount: cartCount,
               ),
               _buildNavItem(
                 index: 3,
-                iconAsset: AppAssets.navOrders,
+                iconAsset: Assets.svg.navOrders.path,
                 label: "Orders",
               ),
               _buildNavItem(
                 index: 4,
-                iconAsset: AppAssets.navProfile,
+                iconAsset: Assets.svg.navProfile.path,
                 label: "Profile",
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:otlob/core/extensions/navigation_extension.dart';
 
 class ExploreAppBar extends StatelessWidget {
   const ExploreAppBar({
@@ -18,7 +19,7 @@ class ExploreAppBar extends StatelessWidget {
       child: Row(
         children: [
           InkWell(
-            onTap: onBackPressed ?? () => Navigator.of(context).maybePop(),
+            onTap: onBackPressed ?? () => context.maybePop(),
             borderRadius: BorderRadius.circular(12),
             child: Container(
               width: 40,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:otlob/core/res/app_colors.dart';
+import 'package:otlob/core/res/color_manager.dart';
 
 
 class OrDivider extends StatelessWidget {
@@ -18,7 +18,7 @@ class OrDivider extends StatelessWidget {
             style: GoogleFonts.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: AppColors.muted,
+              color: ColorM.muted,
               height: 19.12 / 14,
             ),
           ),

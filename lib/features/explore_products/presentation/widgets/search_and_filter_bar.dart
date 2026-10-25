@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:otlob/core/res/app_colors.dart';
-import 'package:otlob/core/res/assets.dart';
+import 'package:otlob/core/res/gen/assets.gen.dart';
 
 class SearchAndFilterBar extends StatelessWidget {
   const SearchAndFilterBar({
@@ -17,6 +16,8 @@ class SearchAndFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Color(0xFFFF5C39);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -48,7 +49,7 @@ class SearchAndFilterBar extends StatelessWidget {
                   prefixIcon: Padding(
                     padding: const EdgeInsets.all(14),
                     child: SvgPicture.asset(
-                      AppAssets.searchIcon,
+                      Assets.svg.searchIcon.path,
                       colorFilter: const ColorFilter.mode(
                         Color(0xFF9CA3AF),
                         BlendMode.srcIn,
@@ -90,7 +91,7 @@ class SearchAndFilterBar extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   SvgPicture.asset(
-                    AppAssets.filterBorderIcon,
+                    Assets.svg.filterBorderIcon.path,
                     width: 18,
                     height: 18,
                     colorFilter: const ColorFilter.mode(
@@ -105,7 +106,7 @@ class SearchAndFilterBar extends StatelessWidget {
                       width: 8,
                       height: 8,
                       decoration: const BoxDecoration(
-                        color: AppColors.primary,
+                        color: primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),

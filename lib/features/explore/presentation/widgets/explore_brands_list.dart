@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_colors.dart';
+import 'package:otlob/core/res/color_manager.dart';
 
 class ExploreBrandItem {
   final String id;
@@ -25,10 +25,10 @@ class ExploreBrandsList extends StatelessWidget {
   final List<ExploreBrandItem> brands;
 
   static const List<ExploreBrandItem> defaultBrands = [
-    ExploreBrandItem(id: 'starbucks', name: 'Starbucks', initial: 'S'),
-    ExploreBrandItem(id: 'costa', name: 'Costa', initial: 'C'),
-    ExploreBrandItem(id: 'cilantro', name: 'Cilantro', initial: 'C'),
-    ExploreBrandItem(id: 'tbs', name: 'TBS', initial: 'T'),
+    ExploreBrandItem(id: '1', name: 'Starbucks', initial: 'S'),
+    ExploreBrandItem(id: '2', name: 'Costa', initial: 'C'),
+    ExploreBrandItem(id: '3', name: 'Cilantro', initial: 'C'),
+    ExploreBrandItem(id: '4', name: 'TBS', initial: 'T'),
   ];
 
   @override
@@ -85,7 +85,7 @@ class ExploreBrandsList extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: ColorM.primary,
                         ),
                       ),
                     ),

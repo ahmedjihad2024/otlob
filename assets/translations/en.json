@@ -1,0 +1,23 @@
+{
+  "_static": "===== Static =====",
+  "search_country": "Search",
+  "app_name": "cliniva",
+
+  "_comment_loading": "===== Loading States =====",
+  "loading": "Loading...",
+  "no_more": "No more data",
+  "failed_loading": "Failed to load data",
+  "load_more": "Load more",
+  "retry_button": "Retry",
+
+  "_comment_errors": "===== Error Messages =====",
+  "user_not_confirmed": "User is not confirmed.",
+  "unauthorized": "Please login to continue",
+  "email_taken": "An account with the given email already exists.",
+  "incorrect_password_or_email": "Incorrect password or email.",
+  "lecture_not_found": "Lecture not found",
+  "unauthorized_forbidden": "You are not authorized to access this page",
+  "error_no_internet": "No internet connection",
+  "error_invalid_number": "Invalid phone number",
+  "error_invalid_email": "Invalid email"
+}

@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
-import 'package:otlob/core/res/assets.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
+import 'package:otlob/core/res/gen/assets.gen.dart';
 import 'package:otlob/shared/widgets/product_card.dart';
 
 class PopularSection extends StatelessWidget {
   const PopularSection({
     super.key,
-    this.products = defaultProducts,
+    this.products,
     this.onSelectProduct,
     this.onAddToCart,
   });
 
-  final List<ProductItem> products;
+  final List<ProductItem>? products;
   final ValueChanged<ProductItem>? onSelectProduct;
   final ValueChanged<ProductItem>? onAddToCart;
 
-  static const List<ProductItem> defaultProducts = [
+  static final List<ProductItem> defaultProducts = [
     ProductItem(
       id: '1',
       brand: 'Starbucks',
       title: 'Double Caramel Frappuccino',
       category: 'Frappuccino',
       price: 200,
-      imageAsset: AppAssets.doubleCaramelFrappuccino,
+      imageAsset: Assets.images.doubleCaramelFrappuccino.path,
     ),
     ProductItem(
       id: '2',
@@ -30,7 +30,7 @@ class PopularSection extends StatelessWidget {
       title: 'Blueberry Cheesecake',
       category: 'Cake',
       price: 155,
-      imageAsset: AppAssets.blueberryCheesecake,
+      imageAsset: Assets.images.blueberryCheesecake.path,
     ),
     ProductItem(
       id: '3',
@@ -38,7 +38,7 @@ class PopularSection extends StatelessWidget {
       title: 'Double Caramel Frappuccino',
       category: 'Frappuccino',
       price: 200,
-      imageAsset: AppAssets.doubleCaramelFrappuccino,
+      imageAsset: Assets.images.doubleCaramelFrappuccino.path,
     ),
     ProductItem(
       id: '4',
@@ -46,17 +46,18 @@ class PopularSection extends StatelessWidget {
       title: 'Blueberry Cheesecake',
       category: 'Cake',
       price: 155,
-      imageAsset: AppAssets.blueberryCheesecake,
+      imageAsset: Assets.images.blueberryCheesecake.path,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final list = products ?? defaultProducts;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.padding),
+          padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
           child: Text(
             "Popular right now",
             style: TextStyle(
@@ -69,11 +70,11 @@ class PopularSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+          padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
           child: GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
+            itemCount: list.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
@@ -81,7 +82,7 @@ class PopularSection extends StatelessWidget {
               childAspectRatio: 160 / 294,
             ),
             itemBuilder: (context, index) {
-              final product = products[index];
+              final product = list[index];
               return ProductCard(
                 product: product,
                 onTap: () => onSelectProduct?.call(product),

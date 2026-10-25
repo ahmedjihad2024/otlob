@@ -26,37 +26,37 @@ class ExploreCategoriesGrid extends StatelessWidget {
 
   static const List<ExploreCategoryItem> defaultCategories = [
     ExploreCategoryItem(
-      id: 'frappuccino',
+      id: '1',
       name: 'Frappuccino',
       emoji: '🥤',
       backgroundColor: Color(0xFFFFF0F0),
     ),
     ExploreCategoryItem(
-      id: 'latte',
+      id: '2',
       name: 'Latte',
       emoji: '☕',
       backgroundColor: Color(0xFFFFF9E6),
     ),
     ExploreCategoryItem(
-      id: 'mocha',
+      id: '3',
       name: 'Mocha',
       emoji: '🍫',
       backgroundColor: Color(0xFFF3F4F6),
     ),
     ExploreCategoryItem(
-      id: 'macchiato',
+      id: '4',
       name: 'Macchiato',
       emoji: '☕',
       backgroundColor: Color(0xFFF5F3FF),
     ),
     ExploreCategoryItem(
-      id: 'matcha',
+      id: '5',
       name: 'Matcha',
       emoji: '🍵',
       backgroundColor: Color(0xFFECFDF5),
     ),
     ExploreCategoryItem(
-      id: 'cake',
+      id: '6',
       name: 'Cake',
       emoji: '🍰',
       backgroundColor: Color(0xFFFDF2F8),

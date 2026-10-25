@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
+
+export 'package:otlob/shared/products/domain/model/brand_item.dart';
+import 'package:otlob/shared/products/domain/model/brand_item.dart';
 
 class BrandsSection extends StatelessWidget {
   const BrandsSection({
@@ -10,14 +13,17 @@ class BrandsSection extends StatelessWidget {
   });
 
   final String? selectedBrand;
-  final ValueChanged<String>? onSelectBrand;
-  final List<String> brands;
+  final ValueChanged<BrandItem>? onSelectBrand;
+  final List<BrandItem> brands;
 
-  static const List<String> defaultBrands = [
-    'Starbucks',
-    'Costa',
-    'Cilantro',
-    'TBS',
+  static const List<BrandItem> defaultBrands = [
+    BrandItem(id: 1, name: 'Starbucks'),
+    BrandItem(id: 2, name: 'Costa'),
+    BrandItem(id: 3, name: 'Cilantro'),
+    BrandItem(id: 4, name: 'TBS'),
+    BrandItem(id: 5, name: 'On The Run'),
+    BrandItem(id: 6, name: 'Caribou'),
+    BrandItem(id: 7, name: 'Krispy Kreme'),
   ];
 
   @override
@@ -26,7 +32,7 @@ class BrandsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.padding),
+          padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
           child: Text(
             "Brands",
             style: TextStyle(
@@ -41,13 +47,15 @@ class BrandsSection extends StatelessWidget {
         SizedBox(
           height: 46,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+            padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.none,
             itemCount: brands.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final brand = brands[index];
+              final isSelected = selectedBrand == brand.name ||
+                  selectedBrand == brand.id.toString();
               return InkWell(
                 onTap: () => onSelectBrand?.call(brand),
                 borderRadius: BorderRadius.circular(12),
@@ -57,10 +65,12 @@ class BrandsSection extends StatelessWidget {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isSelected ? const Color(0xFFFF6B4A) : Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: const Color(0xFFF3F4F6),
+                      color: isSelected
+                          ? const Color(0xFFFF6B4A)
+                          : const Color(0xFFF3F4F6),
                       width: 1,
                     ),
                     boxShadow: [
@@ -73,11 +83,11 @@ class BrandsSection extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    brand,
-                    style: const TextStyle(
+                    brand.name,
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1F2937),
+                      color: isSelected ? Colors.white : const Color(0xFF1F2937),
                     ),
                   ),
                 ),

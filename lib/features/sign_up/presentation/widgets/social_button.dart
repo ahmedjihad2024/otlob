@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:otlob/core/res/app_colors.dart';
+import 'package:otlob/core/res/color_manager.dart';
 
 
 class SocialButton extends StatelessWidget {
@@ -23,8 +23,8 @@ class SocialButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.socialLabel,
-          side: const BorderSide(color: AppColors.socialBorder),
+          foregroundColor: ColorM.socialLabel,
+          side: const BorderSide(color: ColorM.socialBorder),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -40,7 +40,7 @@ class SocialButton extends StatelessWidget {
               style: GoogleFonts.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColors.socialLabel,
+                color: ColorM.socialLabel,
                 height: 19.12 / 14,
               ),
             ),

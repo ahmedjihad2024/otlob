@@ -1,0 +1,23 @@
+{
+  "_static": "===== Static =====",
+  "search_country": "بحث",
+  "app_name": "موعدك",
+
+  "_comment_loading": "===== حالات التحميل =====",
+  "loading": "جاري التحميل",
+  "no_more": "لا يوجد اكثر",
+  "failed_loading": "فشل التحميل",
+  "load_more": "تحميل المزيد",
+  "retry_button": "إعادة المحاولة",
+
+  "_comment_errors": "===== رسائل الخطأ =====",
+  "user_not_confirmed": "الحساب غير مؤكد",
+  "unauthorized": "يرجي تسجيل الدخول للمتابعة",
+  "email_taken": "البريد الإلكتروني مستخدم من قبل",
+  "incorrect_password_or_email": "كلمة المرور غير صحيحة او البريد الإلكتروني غير صحيح",
+  "lecture_not_found": "الدرس غير موجود",
+  "unauthorized_forbidden": "ليس لديك صلاحية للدخول لهذه الصفحة",
+  "error_no_internet": "لا يوجد اتصال بالانترنت",
+  "error_invalid_number": "رقم الهاتف غير صالح",
+  "error_invalid_email": "البريد الإلكتروني غير صالح"
+}

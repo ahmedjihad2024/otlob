@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
-class CategoryItem {
-  final String id;
-  final String name;
-  final String emoji;
-
-  const CategoryItem({
-    required this.id,
-    required this.name,
-    required this.emoji,
-  });
-}
+export 'package:otlob/shared/products/domain/model/category_item.dart';
+import 'package:otlob/shared/products/domain/model/category_item.dart';
 
 class CategoriesSection extends StatelessWidget {
   const CategoriesSection({
@@ -28,11 +19,36 @@ class CategoriesSection extends StatelessWidget {
   final List<CategoryItem> categories;
 
   static const List<CategoryItem> defaultCategories = [
-    CategoryItem(id: 'frappuccino', name: 'Frappuccino', emoji: '🥤'),
-    CategoryItem(id: 'latte', name: 'Latte', emoji: '☕'),
-    CategoryItem(id: 'mocha', name: 'Mocha', emoji: '🍫'),
-    CategoryItem(id: 'macchiato', name: 'Macchiato', emoji: '🥛'),
-    CategoryItem(id: 'matcha', name: 'Matcha', emoji: '🍵'),
+    CategoryItem(
+      id: '1',
+      name: 'Frappuccino',
+      pictureUrl: 'https://talabat639.runasp.net/images/products/Frappuccino.jpg',
+      emoji: '🥤',
+    ),
+    CategoryItem(
+      id: '2',
+      name: 'Latte',
+      pictureUrl: 'https://talabat639.runasp.net/images/products/Latte.jpg',
+      emoji: '☕',
+    ),
+    CategoryItem(
+      id: '3',
+      name: 'Mocha',
+      pictureUrl: 'https://talabat639.runasp.net/images/products/Mocha.jpg',
+      emoji: '🍫',
+    ),
+    CategoryItem(
+      id: '4',
+      name: 'Macchiato',
+      pictureUrl: 'https://talabat639.runasp.net/images/products/Macchiato.jpg',
+      emoji: '🥛',
+    ),
+    CategoryItem(
+      id: '5',
+      name: 'Matcha',
+      pictureUrl: 'https://talabat639.runasp.net/images/products/Matcha.jpg',
+      emoji: '🍵',
+    ),
   ];
 
   @override
@@ -41,7 +57,7 @@ class CategoriesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+          padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -76,7 +92,7 @@ class CategoriesSection extends StatelessWidget {
         SizedBox(
           height: 104,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+            padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.none,
             itemCount: categories.length,
@@ -109,9 +125,26 @@ class CategoriesSection extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Text(
-                          item.emoji,
-                          style: const TextStyle(fontSize: 28),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: (item.pictureUrl != null &&
+                                  item.pictureUrl!.isNotEmpty)
+                              ? Image.network(
+                                  item.pictureUrl!,
+                                  width: 72,
+                                  height: 72,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) => Center(
+                                    child: Text(
+                                      item.displayEmoji,
+                                      style: const TextStyle(fontSize: 28),
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  item.displayEmoji,
+                                  style: const TextStyle(fontSize: 28),
+                                ),
                         ),
                       ),
                       const SizedBox(height: 8),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 class Description extends StatelessWidget {
   const Description({super.key});
@@ -7,7 +7,7 @@ class Description extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.padding),
+      padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

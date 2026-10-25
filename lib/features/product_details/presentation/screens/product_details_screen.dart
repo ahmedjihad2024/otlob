@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 import '../widgets/custom_divider.dart';
 import '../widgets/description.dart';
@@ -54,7 +54,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       const SizedBox(height: 14),
                       const Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.padding,
+                          horizontal: SizeM.pagePadding,
                         ),
                         child: Text(
                           "Glazed Donuts",
@@ -70,8 +70,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       const Price(),
                       const SizedBox(height: 12),
                       const Divider(
-                        indent: AppSizes.padding,
-                        endIndent: AppSizes.padding,
+                        indent: SizeM.pagePadding,
+                        endIndent: SizeM.pagePadding,
                         color: Color(0xFFE5E7EB),
                         height: 1,
                       ),

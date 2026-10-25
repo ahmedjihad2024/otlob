@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/core/res/app_sizes.dart';
+import 'package:otlob/core/res/sizes_manager.dart';
 
 class BannerItem {
   final String id;
@@ -86,7 +86,7 @@ class HeroBanner extends StatelessWidget {
         itemBuilder: (context, index) {
           final banner = banners[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+            padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
             child: _buildBannerCard(
               context: context,
               banner: banner,
