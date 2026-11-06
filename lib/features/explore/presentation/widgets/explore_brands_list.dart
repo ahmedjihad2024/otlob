@@ -1,38 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:otlob/core/res/color_manager.dart';
-
-class ExploreBrandItem {
-  final String id;
-  final String name;
-  final String initial;
-
-  const ExploreBrandItem({
-    required this.id,
-    required this.name,
-    required this.initial,
-  });
-}
+import 'package:otlob/shared/products/domain/model/brand_item.dart';
 
 class ExploreBrandsList extends StatelessWidget {
   const ExploreBrandsList({
     super.key,
+    required this.brands,
     this.onSelectBrand,
-    this.brands = defaultBrands,
   });
 
-  final ValueChanged<ExploreBrandItem>? onSelectBrand;
-  final List<ExploreBrandItem> brands;
-
-  static const List<ExploreBrandItem> defaultBrands = [
-    ExploreBrandItem(id: '1', name: 'Starbucks', initial: 'S'),
-    ExploreBrandItem(id: '2', name: 'Costa', initial: 'C'),
-    ExploreBrandItem(id: '3', name: 'Cilantro', initial: 'C'),
-    ExploreBrandItem(id: '4', name: 'TBS', initial: 'T'),
-  ];
+  final List<BrandItem> brands;
+  final ValueChanged<BrandItem>? onSelectBrand;
 
   @override
   Widget build(BuildContext context) {
+    if (brands.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -53,6 +37,9 @@ class ExploreBrandsList extends StatelessWidget {
           separatorBuilder: (_, _) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final brand = brands[index];
+            final initial = brand.name.trim().isNotEmpty
+                ? brand.name.trim()[0].toUpperCase()
+                : 'B';
             return InkWell(
               onTap: () => onSelectBrand?.call(brand),
               borderRadius: BorderRadius.circular(20),
@@ -81,7 +68,7 @@ class ExploreBrandsList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
-                        brand.initial,
+                        initial,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,

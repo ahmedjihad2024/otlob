@@ -22,8 +22,8 @@ class OrderCard extends StatelessWidget {
       imageWidget = CachedNetworkImage(
         imageUrl: item.imageUrl!,
         fit: BoxFit.contain,
-        placeholder: (_, __) => Container(color: const Color(0xFFF3F4F6)),
-        errorWidget: (_, __, ___) => const Icon(
+        placeholder: (_, _) => Container(color: const Color(0xFFF3F4F6)),
+        errorWidget: (_, _, _) => const Icon(
           Icons.fastfood_outlined,
           size: 20,
           color: ColorM.muted,

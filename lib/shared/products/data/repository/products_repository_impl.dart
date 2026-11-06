@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:otlob/core/network/error_handler/error_handler.dart';
 import 'package:otlob/core/network/error_handler/failure.dart';
-import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/shared/products/data/data_source/products_remote_data_source.dart';
 import 'package:otlob/shared/products/data/mapper/products_mapper.dart';
 import 'package:otlob/shared/products/data/request/get_products_request.dart';

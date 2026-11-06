@@ -24,10 +24,20 @@ import 'package:otlob/shared/cart/data/api/cart_api_service.dart';
 import 'package:otlob/shared/cart/data/data_source/cart_remote_data_source.dart';
 import 'package:otlob/shared/cart/data/repository/cart_repository_impl.dart';
 import 'package:otlob/shared/cart/domain/repository/cart_repository_abs.dart';
+import 'package:otlob/shared/cart/domain/usecase/clear_basket_usecase.dart';
 import 'package:otlob/shared/cart/domain/usecase/get_basket_usecase.dart';
 import 'package:otlob/shared/cart/domain/usecase/update_basket_item_usecase.dart';
 import 'package:otlob/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:otlob/features/orders/data/api/orders_api_service.dart';
+import 'package:otlob/features/orders/data/data_source/orders_remote_data_source.dart';
+import 'package:otlob/features/orders/data/repository/orders_repository_impl.dart';
+import 'package:otlob/features/orders/domain/repository/orders_repository_abs.dart';
+import 'package:otlob/features/orders/domain/usecase/create_order_usecase.dart';
+import 'package:otlob/features/orders/domain/usecase/get_delivery_methods_usecase.dart';
+import 'package:otlob/features/orders/domain/usecase/get_order_by_id_usecase.dart';
+import 'package:otlob/features/orders/domain/usecase/get_orders_usecase.dart';
 import 'package:otlob/features/orders/presentation/cubit/orders_cubit.dart';
+import 'package:otlob/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:otlob/features/explore_products/presentation/cubit/cubit/explor_products_cubit_cubit.dart';
 import 'package:otlob/features/home/presentation/cubit/home_cubit.dart';
 import 'package:otlob/features/product_details/presentation/cubit/product_details_cubit.dart';
@@ -167,12 +177,16 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<UpdateBasketItemUseCase>(
     () => UpdateBasketItemUseCase(sl<CartRepositoryAbs>()),
   );
+  sl.registerLazySingleton<ClearBasketUseCase>(
+    () => ClearBasketUseCase(sl<CartRepositoryAbs>()),
+  );
 
   // Cubit
   sl.registerLazySingleton<CartCubit>(
     () => CartCubit(
       sl<GetBasketUseCase>(),
       sl<UpdateBasketItemUseCase>(),
+      sl<ClearBasketUseCase>(),
     ),
   );
 
@@ -187,13 +201,52 @@ Future<void> setupServiceLocator() async {
   );
 
   // ─── Orders Feature ────────────────────────────────────────────────────────
+  // API
+  sl.registerLazySingleton<OrdersApiService>(
+    () => OrdersApiService(sl<Dio>()),
+  );
+
+  // Data Source
+  sl.registerLazySingleton<OrdersRemoteDataSource>(
+    () => OrdersRemoteDataSourceImpl(sl<OrdersApiService>()),
+  );
+
+  // Repository
+  sl.registerLazySingleton<OrdersRepositoryAbs>(
+    () => OrdersRepositoryImpl(sl<OrdersRemoteDataSource>()),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton<GetOrdersUseCase>(
+    () => GetOrdersUseCase(sl<OrdersRepositoryAbs>()),
+  );
+  sl.registerLazySingleton<GetOrderByIdUseCase>(
+    () => GetOrderByIdUseCase(sl<OrdersRepositoryAbs>()),
+  );
+  sl.registerLazySingleton<CreateOrderUseCase>(
+    () => CreateOrderUseCase(sl<OrdersRepositoryAbs>()),
+  );
+  sl.registerLazySingleton<GetDeliveryMethodsUseCase>(
+    () => GetDeliveryMethodsUseCase(sl<OrdersRepositoryAbs>()),
+  );
+
   // Cubit
-  sl.registerFactory<OrdersCubit>(() => OrdersCubit());
+  sl.registerFactory<OrdersCubit>(
+    () => OrdersCubit(sl<GetOrdersUseCase>()),
+  );
 
   // ─── Product Details Feature ────────────────────────────────────────────────
   // Cubit
   sl.registerFactory<ProductDetailsCubit>(
     () => ProductDetailsCubit(sl<GetProductByIdUseCase>()),
+  );
+
+  // ─── Explore Feature ────────────────────────────────────────────────────────
+  sl.registerFactory<ExploreCubit>(
+    () => ExploreCubit(
+      sl<GetCategoriesUseCase>(),
+      sl<GetBrandsUseCase>(),
+    ),
   );
 
   // ─── Explore Products Feature ───────────────────────────────────────────────

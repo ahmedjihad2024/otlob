@@ -16,6 +16,10 @@ final class OrdersLoading extends OrdersState {
   const OrdersLoading();
 }
 
+final class OrdersEmpty extends OrdersState {
+  const OrdersEmpty();
+}
+
 final class OrdersSuccess extends OrdersState {
   final List<OrderModel> orders;
 

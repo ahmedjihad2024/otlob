@@ -4,7 +4,9 @@ import 'package:otlob/core/app.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/services/storage_services/storage_service.dart';
 import 'package:otlob/features/cart/presentation/screens/cart_screen.dart';
+import 'package:otlob/features/orders/presentation/screens/confirm_order_screen.dart';
 import 'package:otlob/features/orders/presentation/screens/orders_screen.dart';
+import 'package:otlob/features/profile/presentation/screens/profile_screen.dart';
 import 'package:otlob/features/explore_products/presentation/screens/explore_products_screen.dart';
 import 'package:otlob/features/home/presentation/screens/home_screen.dart';
 import 'package:otlob/features/product_details/presentation/screens/product_details_screen.dart';
@@ -129,32 +131,32 @@ GoRouter createAppRouter({String initialLocation = '/auth'}) => GoRouter(
     _r(
       name: Routes.splash.name,
       path: Routes.splash.path,
-      builder: (_, __) => const SignInScreen(),
+      builder: (_, _) => const SignInScreen(),
     ),
     _r(
       name: Routes.onboarding.name,
       path: Routes.onboarding.path,
-      builder: (_, __) => const SignInScreen(),
+      builder: (_, _) => const SignInScreen(),
     ),
     _r(
       name: Routes.auth.name,
       path: Routes.auth.path,
-      builder: (_, __) => const SignInScreen(),
+      builder: (_, _) => const SignInScreen(),
     ),
     _r(
       name: Routes.signUp.name,
       path: Routes.signUp.path,
-      builder: (_, __) => const SignUpScreen(),
+      builder: (_, _) => const SignUpScreen(),
     ),
     _r(
       name: Routes.authSuccess.name,
       path: Routes.authSuccess.path,
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, _) => const HomeScreen(),
     ),
     _r(
       name: Routes.home.name,
       path: Routes.home.path,
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, _) => const HomeScreen(),
     ),
     _r(
       name: Routes.search.name,
@@ -174,7 +176,7 @@ GoRouter createAppRouter({String initialLocation = '/auth'}) => GoRouter(
     _r(
       name: Routes.sections.name,
       path: Routes.sections.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.products.name,
@@ -217,67 +219,67 @@ GoRouter createAppRouter({String initialLocation = '/auth'}) => GoRouter(
     _r(
       name: Routes.cart.name,
       path: Routes.cart.path,
-      builder: (_, __) => const CartScreen(),
+      builder: (_, _) => const CartScreen(),
     ),
     _r(
       name: Routes.confirmOrder.name,
       path: Routes.confirmOrder.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const ConfirmOrderScreen(),
     ),
     _r(
       name: Routes.orderDetails.name,
       path: Routes.orderDetails.path,
-      builder: (_, __) => const OrdersScreen(),
+      builder: (_, _) => const OrdersScreen(),
     ),
     _r(
       name: Routes.language.name,
       path: Routes.language.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.editProfile.name,
       path: Routes.editProfile.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const ProfileScreen(),
     ),
     _r(
       name: Routes.legalPolicies.name,
       path: Routes.legalPolicies.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.helpSupport.name,
       path: Routes.helpSupport.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.cashierHome.name,
       path: Routes.cashierHome.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.support.name,
       path: Routes.support.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.cashierOrderDetails.name,
       path: Routes.cashierOrderDetails.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.captainHome.name,
       path: Routes.captainHome.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.captainOrderDetails.name,
       path: Routes.captainOrderDetails.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
     _r(
       name: Routes.captainDeliveryOutcome.name,
       path: Routes.captainDeliveryOutcome.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, _) => const SizedBox(),
     ),
   ],
 );

@@ -1,82 +1,31 @@
 import 'package:flutter/material.dart';
-
-class ExploreCategoryItem {
-  final String id;
-  final String name;
-  final String emoji;
-  final Color backgroundColor;
-
-  const ExploreCategoryItem({
-    required this.id,
-    required this.name,
-    required this.emoji,
-    required this.backgroundColor,
-  });
-}
+import 'package:otlob/shared/products/domain/model/category_item.dart';
 
 class ExploreCategoriesGrid extends StatelessWidget {
   const ExploreCategoriesGrid({
     super.key,
+    required this.categories,
     this.onSelectCategory,
-    this.categories = defaultCategories,
   });
 
-  final ValueChanged<ExploreCategoryItem>? onSelectCategory;
-  final List<ExploreCategoryItem> categories;
+  final List<CategoryItem> categories;
+  final ValueChanged<CategoryItem>? onSelectCategory;
 
-  static const List<ExploreCategoryItem> defaultCategories = [
-    ExploreCategoryItem(
-      id: '1',
-      name: 'Frappuccino',
-      emoji: '🥤',
-      backgroundColor: Color(0xFFFFF0F0),
-    ),
-    ExploreCategoryItem(
-      id: '2',
-      name: 'Latte',
-      emoji: '☕',
-      backgroundColor: Color(0xFFFFF9E6),
-    ),
-    ExploreCategoryItem(
-      id: '3',
-      name: 'Mocha',
-      emoji: '🍫',
-      backgroundColor: Color(0xFFF3F4F6),
-    ),
-    ExploreCategoryItem(
-      id: '4',
-      name: 'Macchiato',
-      emoji: '☕',
-      backgroundColor: Color(0xFFF5F3FF),
-    ),
-    ExploreCategoryItem(
-      id: '5',
-      name: 'Matcha',
-      emoji: '🍵',
-      backgroundColor: Color(0xFFECFDF5),
-    ),
-    ExploreCategoryItem(
-      id: '6',
-      name: 'Cake',
-      emoji: '🍰',
-      backgroundColor: Color(0xFFFDF2F8),
-    ),
-    ExploreCategoryItem(
-      id: 'donuts',
-      name: 'Donuts',
-      emoji: '🍩',
-      backgroundColor: Color(0xFFFFF7ED),
-    ),
-    ExploreCategoryItem(
-      id: 'salad',
-      name: 'Salad',
-      emoji: '🥗',
-      backgroundColor: Color(0xFFEFF6FF),
-    ),
+  static const List<Color> _categoryColors = [
+    Color(0xFFFFF0F0),
+    Color(0xFFFFF9E6),
+    Color(0xFFF3F4F6),
+    Color(0xFFF5F3FF),
+    Color(0xFFECFDF5),
+    Color(0xFFFDF2F8),
+    Color(0xFFFFF7ED),
+    Color(0xFFEFF6FF),
   ];
 
   @override
   Widget build(BuildContext context) {
+    if (categories.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,19 +51,20 @@ class ExploreCategoriesGrid extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             final category = categories[index];
+            final color = _categoryColors[index % _categoryColors.length];
             return InkWell(
               onTap: () => onSelectCategory?.call(category),
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: category.backgroundColor,
+                  color: color,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   children: [
                     Text(
-                      category.emoji,
+                      category.displayEmoji,
                       style: const TextStyle(fontSize: 22),
                     ),
                     const SizedBox(width: 12),

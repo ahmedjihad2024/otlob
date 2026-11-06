@@ -1,5 +1,4 @@
 import 'package:otlob/core/network/error_handler/failure.dart';
-import 'package:otlob/core/network/failure_message.dart';
 
 extension FailureMessage on Failure {
   String get message => switch (this) {

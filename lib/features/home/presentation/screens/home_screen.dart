@@ -7,6 +7,7 @@ import 'package:otlob/features/cart/presentation/screens/cart_screen.dart';
 import 'package:otlob/features/explore/presentation/screens/explore_tab_screen.dart';
 import 'package:otlob/features/home/presentation/widgets/bottom_nav_bar.dart';
 import 'package:otlob/features/orders/presentation/screens/orders_screen.dart';
+import 'package:otlob/features/profile/presentation/screens/profile_screen.dart';
 
 import 'home_tap_screen.dart';
 
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ExploreTabScreen(),
     CartScreen(onExploreTap: () => _onTabSelected(1)),
     const OrdersScreen(),
-    Container(color: Colors.black.withValues(alpha: .4)),
+    ProfileScreen(onOrdersTap: () => _onTabSelected(3)),
   ];
 
   void _onTabSelected(int index) {
@@ -55,8 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFFFAFAFA),
         bottomNavigationBar: BlocBuilder<CartCubit, CartState>(
           builder: (context, cartState) {
-            final cartCount = context.read<CartCubit>().currentCount;
-
             return ValueListenableBuilder(
               valueListenable: _currentNavIndex,
               builder: (context, currentIndex, _) {

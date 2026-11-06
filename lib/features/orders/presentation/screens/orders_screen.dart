@@ -4,9 +4,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/res/color_manager.dart';
 import 'package:otlob/core/ui_kit/customized_smart_refresh.dart';
+import 'package:otlob/features/orders/domain/model/order_model.dart';
 import 'package:otlob/features/orders/presentation/cubit/orders_cubit.dart';
 import 'package:otlob/features/orders/presentation/cubit/orders_state.dart';
 import 'package:otlob/features/orders/presentation/widgets/order_card.dart';
+import 'package:otlob/features/orders/presentation/widgets/order_status_badge.dart';
+import 'package:otlob/features/orders/presentation/widgets/orders_shimmer_loading.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -54,9 +57,7 @@ class _OrdersViewState extends State<OrdersView> {
           },
           builder: (context, state) {
             if (state is OrdersLoading && !_refreshController.isRefresh) {
-              return const Center(
-                child: CircularProgressIndicator(color: ColorM.primary),
-              );
+              return const OrdersShimmerLoading();
             }
 
             if (state is OrdersError) {
@@ -105,6 +106,10 @@ class _OrdersViewState extends State<OrdersView> {
                   ),
                 ),
               );
+            }
+
+            if (state is OrdersEmpty) {
+              return _buildEmptyState(context);
             }
 
             if (state is OrdersSuccess) {
@@ -159,25 +164,13 @@ class _OrdersViewState extends State<OrdersView> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: orders.length,
-                          separatorBuilder: (_, __) =>
+                          separatorBuilder: (_, _) =>
                               const SizedBox(height: 16),
                           itemBuilder: (context, index) {
                             final order = orders[index];
                             return OrderCard(
                               order: order,
-                              onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Order #${order.orderNumber} details',
-                                      style:
-                                          const TextStyle(fontFamily: 'Inter'),
-                                    ),
-                                    backgroundColor: const Color(0xFF0A192F),
-                                    duration: const Duration(seconds: 2),
-                                  ),
-                                );
-                              },
+                              onTap: () => _showOrderDetailsSheet(context, order),
                             );
                           },
                         ),
@@ -196,46 +189,249 @@ class _OrdersViewState extends State<OrdersView> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.receipt_long_outlined,
-                size: 48,
-                color: ColorM.muted,
+    return CustomizedSmartRefresh(
+      controller: _refreshController,
+      onRefresh: _handleRefresh,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF3F4F6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.receipt_long_outlined,
+                          size: 48,
+                          color: ColorM.muted,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'No Orders Yet',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0A192F),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'When you place an order, it will show up here.\nPull down to refresh.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: Color(0xFF9CA3AF),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'No Orders Yet',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF0A192F),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showOrderDetailsSheet(BuildContext context, OrderModel order) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.65,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (_, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5E7EB),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'When you place an order, it will show up here.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                color: Color(0xFF9CA3AF),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Order #${order.orderNumber}',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF0A192F),
+                    ),
+                  ),
+                  OrderStatusBadge(status: order.status, label: order.statusText),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 6),
+              Text(
+                'Placed on ${order.date}',
+                style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
+              ),
+              const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 16),
+              const Text(
+                'ITEMS',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF9CA3AF),
+                  letterSpacing: 1.1,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ...order.previewItems.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF3F4F6),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.fastfood_outlined,
+                          size: 18,
+                          color: ColorM.muted,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF0A192F),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        'x${item.quantity}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF6B7280),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        '${(item.price * item.quantity).toInt()} EGP',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0A192F),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 16),
+              if (order.shippingAddress != null &&
+                  order.shippingAddress!.fullAddress.isNotEmpty) ...[
+                const Text(
+                  'DELIVERY ADDRESS',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF9CA3AF),
+                    letterSpacing: 1.1,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  order.shippingAddress!.fullAddress,
+                  style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
+                ),
+                const SizedBox(height: 16),
+                const Divider(height: 1),
+                const SizedBox(height: 16),
+              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Delivery Type', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
+                  Text(order.deliveryType, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Delivery Fee', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
+                  Text('${order.deliveryCost.toInt()} EGP', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Total Amount', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF0A192F))),
+                  Text(
+                    '${order.total.toInt()} EGP',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: ColorM.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorM.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: const Text(
+                    'Close',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

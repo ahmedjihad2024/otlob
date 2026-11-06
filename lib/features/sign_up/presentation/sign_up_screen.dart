@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/extensions/navigation_extension.dart';
-import 'package:otlob/core/network/error_handler/failure.dart';
 import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/core/res/gen/assets.gen.dart';
 import 'package:otlob/core/res/color_manager.dart';

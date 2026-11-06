@@ -33,6 +33,7 @@ abstract class ColorM {
   static const Color socialBorder           = Color(0xFFCDD1E0);
   static const Color socialLabel            = Color(0xFF242A31);
   static const Color danger                 = Color(0xFFFB344F);
+  static const Color success                = Color(0xFF10B981);
   static const Color passwordHint           = Color(0x6E1F1F1F);
 
   // Grayscale

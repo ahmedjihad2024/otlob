@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
+import 'package:otlob/core/extensions/navigation_extension.dart';
 import 'package:otlob/core/res/color_manager.dart';
 import 'package:otlob/core/ui_kit/customized_smart_refresh.dart';
 import 'package:otlob/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:otlob/features/cart/presentation/cubit/cart_state.dart';
 import 'package:otlob/features/cart/presentation/widgets/cart_item_card.dart';
+import 'package:otlob/features/cart/presentation/widgets/cart_shimmer_loading.dart';
 import 'package:otlob/features/cart/presentation/widgets/order_summary_card.dart';
 
 class CartScreen extends StatelessWidget {
@@ -72,9 +74,7 @@ class _CartViewState extends State<CartView> {
           },
           builder: (context, state) {
             if (state is CartLoading && !_refreshController.isRefresh) {
-              return const Center(
-                child: CircularProgressIndicator(color: ColorM.primary),
-              );
+              return const CartShimmerLoading();
             }
 
             if (state is CartError) {
@@ -180,7 +180,7 @@ class _CartViewState extends State<CartView> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: basket.items.length,
-                                separatorBuilder: (_, __) =>
+                                separatorBuilder: (_, _) =>
                                     const SizedBox(height: 16),
                                 itemBuilder: (context, index) {
                                   final item = basket.items[index];
@@ -292,16 +292,7 @@ class _CartViewState extends State<CartView> {
                         height: 54,
                         child: ElevatedButton(
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Proceeding to Checkout with ${basket.total.toInt()} EGP',
-                                  style: const TextStyle(fontFamily: 'Inter'),
-                                ),
-                                backgroundColor: const Color(0xFF0A192F),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                            context.pushNamed(Routes.confirmOrder);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: ColorM.primary,

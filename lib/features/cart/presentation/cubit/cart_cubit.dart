@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:otlob/core/network/error_handler/failure.dart';
 import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/core/usecase/base.dart';
 import 'package:otlob/shared/cart/data/request/update_basket_request.dart';
 import 'package:otlob/shared/cart/domain/model/basket_model.dart';
+import 'package:otlob/shared/cart/domain/usecase/clear_basket_usecase.dart';
 import 'package:otlob/shared/cart/domain/usecase/get_basket_usecase.dart';
 import 'package:otlob/shared/cart/domain/usecase/update_basket_item_usecase.dart';
 
@@ -12,9 +12,13 @@ import 'cart_state.dart';
 class CartCubit extends Cubit<CartState> {
   final GetBasketUseCase _getBasketUseCase;
   final UpdateBasketItemUseCase _updateBasketItemUseCase;
+  final ClearBasketUseCase _clearBasketUseCase;
 
-  CartCubit(this._getBasketUseCase, this._updateBasketItemUseCase)
-    : super(const CartInitial());
+  CartCubit(
+    this._getBasketUseCase,
+    this._updateBasketItemUseCase,
+    this._clearBasketUseCase,
+  ) : super(const CartInitial());
 
   // Default mock basket matching Figma design (used for initial preview & fallback)
   static final BasketModel defaultMockBasket = BasketModel(
@@ -103,6 +107,13 @@ class CartCubit extends Cubit<CartState> {
       ..removeWhere((i) => i.id == productId);
     final updatedBasket = currentState.basket.copyWith(items: updatedItems);
     emit(currentState.copyWith(basket: updatedBasket));
+  }
+
+  /// Clears the basket on backend and resets the state
+  Future<void> clearBasket() async {
+    emit(const CartLoading());
+    await _clearBasketUseCase.execute(const NoParams());
+    emit(const CartSuccess(basket: BasketModel(id: '', items: [])));
   }
 
   Future<void> _performQuantityUpdate(int productId, int newQuantity) async {

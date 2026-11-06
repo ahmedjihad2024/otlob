@@ -12,6 +12,7 @@ import 'package:otlob/shared/widgets/product_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../widgets/explore_app_bar.dart';
+import '../widgets/explore_shimmer_loading.dart';
 import '../widgets/search_and_filter_bar.dart';
 import '../widgets/sort_chips.dart';
 
@@ -184,9 +185,7 @@ class _ExploreProductsViewState extends State<_ExploreProductsView> {
 
     if (state.status == ExploreProductsStatus.loading ||
         state.status == ExploreProductsStatus.initial) {
-      return const Center(
-        child: CircularProgressIndicator(color: primaryColor),
-      );
+      return const ExploreShimmerLoading();
     }
 
     if (state.status == ExploreProductsStatus.failure) {

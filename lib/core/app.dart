@@ -11,13 +11,14 @@ import 'package:otlob/core/ui_kit/global_keyboard_dismissal.dart';
 // dart format off
 // ignore: non_constant_identifier_names
 GlobalKey<ScaffoldMessengerState> SCAFFOLD_MESSENGER_KEY = GlobalKey<ScaffoldMessengerState>();
+// ignore: non_constant_identifier_names
 final GlobalKey<NavigatorState>   NAVIGATOR_KEY          = GlobalKey<NavigatorState>();
 // dart format on
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  const MyApp._internal({super.key});
+  const MyApp._internal();
 
   static const MyApp _instance = MyApp._internal();
 

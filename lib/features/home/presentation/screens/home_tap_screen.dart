@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/extensions/navigation_extension.dart';
 import 'package:otlob/core/res/color_manager.dart';
+import 'package:otlob/core/services/storage_services/storage_service.dart';
 import 'package:otlob/features/explore_products/presentation/screens/explore_products_screen.dart';
 import 'package:otlob/features/home/presentation/cubit/home_cubit.dart';
 import 'package:otlob/features/home/presentation/cubit/home_state.dart';
@@ -10,6 +11,7 @@ import 'package:otlob/features/home/presentation/widgets/app_bar.dart';
 import 'package:otlob/features/home/presentation/widgets/brands_section.dart';
 import 'package:otlob/features/home/presentation/widgets/categories_section.dart';
 import 'package:otlob/features/home/presentation/widgets/hero_banner.dart';
+import 'package:otlob/features/home/presentation/widgets/home_shimmer_loading.dart';
 import 'package:otlob/features/home/presentation/widgets/popular_section.dart';
 import 'package:otlob/shared/cart/cart_helper.dart';
 
@@ -34,6 +36,25 @@ class _HomeTapView extends StatefulWidget {
 
 class _HomeTapViewState extends State<_HomeTapView>
     with AutomaticKeepAliveClientMixin {
+  String _userName = 'Ahmed Jihad';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  void _loadUserName() {
+    final userMap = sl<StorageService>().getMap('user_name');
+    if (userMap != null && userMap['name'] != null) {
+      if (mounted) {
+        setState(() {
+          _userName = userMap['name'] as String;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -60,9 +81,7 @@ class _HomeTapViewState extends State<_HomeTapView>
             state.categories.isNotEmpty;
 
         if (state.status.isLoading && !hasAnyData) {
-          return const Center(
-            child: CircularProgressIndicator(color: ColorM.primary),
-          );
+          return const HomeShimmerLoading();
         }
 
         if (state.status.isError && !hasAnyData) {
@@ -120,7 +139,7 @@ class _HomeTapViewState extends State<_HomeTapView>
                 children: [
                   const SizedBox(height: 12),
                   MyAppBar(
-                    userName: "Ahmed Jihad",
+                    userName: _userName,
                     location: "14 Tahrir Square, Cairo",
                     isThereIsNotifications: true,
                     onTapNotification: () {},

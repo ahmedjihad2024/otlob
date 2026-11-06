@@ -28,7 +28,7 @@ class TopAppBar extends StatelessWidget {
             width: double.infinity,
             height: 382,
             fit: BoxFit.cover,
-            placeholder: (_, __) => Container(
+            placeholder: (_, _) => Container(
               width: double.infinity,
               height: 382,
               color: const Color(0xFFF3F4F6),
@@ -36,7 +36,7 @@ class TopAppBar extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             ),
-            errorWidget: (_, __, ___) => Image.asset(
+            errorWidget: (_, _, _) => Image.asset(
               Assets.images.glazedDonuts.path,
               width: double.infinity,
               height: 382,
@@ -49,7 +49,7 @@ class TopAppBar extends StatelessWidget {
             width: double.infinity,
             height: 382,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Image.asset(
+            errorBuilder: (_, _, _) => Image.asset(
               Assets.images.glazedDonuts.path,
               width: double.infinity,
               height: 382,

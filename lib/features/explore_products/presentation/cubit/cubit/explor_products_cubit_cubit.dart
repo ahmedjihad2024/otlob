@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:otlob/core/network/error_handler/failure.dart';
 import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/shared/products/data/request/get_products_request.dart';
 import 'package:otlob/shared/products/domain/model/product_item.dart';

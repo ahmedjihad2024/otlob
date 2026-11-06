@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/core/services/storage_services/storage_service.dart';
@@ -18,8 +17,8 @@ class SignInCubit extends Cubit<SignInState> {
   void signIn(
     String email_,
     String password_,
-    FocusNode _emailFocus,
-    FocusNode _passwordFocus,
+    FocusNode emailFocus,
+    FocusNode passwordFocus,
   ) async {
     sl<LoadingManager>().show();
     final email = email_.trim();
@@ -29,7 +28,7 @@ class SignInCubit extends Cubit<SignInState> {
       // 1. Email
       SubmitField(
         value: email,
-        focusNode: _emailFocus,
+        focusNode: emailFocus,
         rule: Rules.all([
           Rules.required('Please enter your email'),
           Rules.email('Please enter a valid email address'),
@@ -39,7 +38,7 @@ class SignInCubit extends Cubit<SignInState> {
       // 2. Password
       SubmitField(
         value: password,
-        focusNode: _passwordFocus,
+        focusNode: passwordFocus,
         rule: Rules.all([
           Rules.required('Please enter your password'),
           Rules.minLength(6, 'Password must be at least 6 characters'),
@@ -63,7 +62,10 @@ class SignInCubit extends Cubit<SignInState> {
       (l) async =>
           sl<SnackbarHelper>().showMessage(l.message, ErrorMessage.snackBar),
       (r) async {
-        await sl<StorageService>().setMap("user_name", {"name": r.displayName});
+        await sl<StorageService>().setMap("user_name", {
+          "name": r.displayName,
+          "email": r.email,
+        });
         await sl<StorageService>().setToken(r.token);
         emit(Success());
       },

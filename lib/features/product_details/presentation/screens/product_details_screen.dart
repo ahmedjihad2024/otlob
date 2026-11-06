@@ -12,6 +12,7 @@ import '../widgets/custom_divider.dart';
 import '../widgets/description.dart';
 import '../widgets/my_button_bar.dart';
 import '../widgets/price.dart';
+import '../widgets/product_details_shimmer.dart';
 import '../widgets/product_type_selector.dart';
 import '../widgets/top_app_bar.dart';
 
@@ -47,9 +48,7 @@ class _ProductDetailsView extends StatelessWidget {
       body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
         builder: (context, state) {
           if (state is ProductDetailsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: ColorM.primary),
-            );
+            return const ProductDetailsShimmer();
           }
 
           if (state is ProductDetailsError) {
