@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'get_products_request.dart';
@@ -9,6 +9,7 @@ part of 'get_products_request.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $GetProductsRequestCopyWith<GetProductsRequest> get copyWith => _$GetProductsReq
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetProductsRequest&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.search, search) || other.search == search)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
+  final _this = this as GetProductsRequest;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetProductsRequest&&(identical(other.pageSize, _this.pageSize) || other.pageSize == _this.pageSize)&&(identical(other.pageIndex, _this.pageIndex) || other.pageIndex == _this.pageIndex)&&(identical(other.search, _this.search) || other.search == _this.search)&&(identical(other.sort, _this.sort) || other.sort == _this.sort)&&(identical(other.brandId, _this.brandId) || other.brandId == _this.brandId)&&(identical(other.categoryId, _this.categoryId) || other.categoryId == _this.categoryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,pageSize,pageIndex,search,sort,brandId,categoryId);
+int get hashCode {
+  final _this = this as GetProductsRequest;
+  return Object.hash(runtimeType,_this.pageSize,_this.pageIndex,_this.search,_this.sort,_this.brandId,_this.categoryId);
+}
 
 @override
 String toString() {
-  return 'GetProductsRequest(pageSize: $pageSize, pageIndex: $pageIndex, search: $search, sort: $sort, brandId: $brandId, categoryId: $categoryId)';
+  final _this = this as GetProductsRequest;
+  return 'GetProductsRequest(pageSize: ${_this.pageSize}, pageIndex: ${_this.pageIndex}, search: ${_this.search}, sort: ${_this.sort}, brandId: ${_this.brandId}, categoryId: ${_this.categoryId})';
 }
 
 
@@ -66,7 +72,7 @@ class _$GetProductsRequestCopyWithImpl<$Res>
 /// Create a copy of GetProductsRequest
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? pageSize = freezed,Object? pageIndex = freezed,Object? search = freezed,Object? sort = freezed,Object? brandId = freezed,Object? categoryId = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(GetProductsRequest(
 pageSize: freezed == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
 as int?,pageIndex: freezed == pageIndex ? _self.pageIndex : pageIndex // ignore: cast_nullable_to_non_nullable
 as int?,search: freezed == search ? _self.search : search // ignore: cast_nullable_to_non_nullable
@@ -237,16 +243,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetProductsRequest&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.search, search) || other.search == search)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetProductsRequest&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.search, search) || other.search == search)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,pageSize,pageIndex,search,sort,brandId,categoryId);
+int get hashCode {
+    return Object.hash(runtimeType,pageSize,pageIndex,search,sort,brandId,categoryId);
+}
 
 @override
 String toString() {
-  return 'GetProductsRequest(pageSize: $pageSize, pageIndex: $pageIndex, search: $search, sort: $sort, brandId: $brandId, categoryId: $categoryId)';
+    return 'GetProductsRequest(pageSize: $pageSize, pageIndex: $pageIndex, search: $search, sort: $sort, brandId: $brandId, categoryId: $categoryId)';
 }
 
 

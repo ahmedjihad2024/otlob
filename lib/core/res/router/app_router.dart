@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otlob/core/app.dart';
+import 'package:otlob/core/di/dependency_injection.dart';
+import 'package:otlob/core/services/storage_services/storage_service.dart';
+import 'package:otlob/features/cart/presentation/screens/cart_screen.dart';
+import 'package:otlob/features/orders/presentation/screens/orders_screen.dart';
 import 'package:otlob/features/explore_products/presentation/screens/explore_products_screen.dart';
 import 'package:otlob/features/home/presentation/screens/home_screen.dart';
 import 'package:otlob/features/product_details/presentation/screens/product_details_screen.dart';
 import 'package:otlob/features/sign_in/presentation/sign_in_screen.dart';
 import 'package:otlob/features/sign_up/presentation/sign_up_screen.dart';
+import 'package:otlob/shared/products/domain/model/product_item.dart';
 
 /// Centralized path/name constants — pass these to `context.pushNamed` /
 /// `context.go` so we never typo a route name and IDE rename works.
@@ -102,9 +107,24 @@ GoRoute _r({
   ),
 );
 
-final GoRouter appRouter = GoRouter(
+GoRouter createAppRouter({String initialLocation = '/auth'}) => GoRouter(
   navigatorKey: NAVIGATOR_KEY,
-  initialLocation: Routes.auth.path,
+  initialLocation: initialLocation,
+  redirect: (BuildContext context, GoRouterState state) async {
+    final hasToken = await sl<StorageService>().hasToken();
+    final isAuthRoute = state.matchedLocation == Routes.auth.path ||
+        state.matchedLocation == Routes.signUp.path ||
+        state.matchedLocation == Routes.splash.path ||
+        state.matchedLocation == Routes.onboarding.path;
+
+    if (!hasToken && !isAuthRoute) {
+      return Routes.auth.path;
+    }
+    if (hasToken && isAuthRoute) {
+      return Routes.home.path;
+    }
+    return null;
+  },
   routes: [
     _r(
       name: Routes.splash.name,
@@ -174,12 +194,30 @@ final GoRouter appRouter = GoRouter(
     _r(
       name: Routes.productDetails.name,
       path: Routes.productDetails.path,
-      builder: (_, __) => const ProductDetailsScreen(),
+      builder: (_, state) {
+        int? productId;
+        ProductItem? initialProduct;
+
+        final extra = state.extra;
+        if (extra is ProductItem) {
+          initialProduct = extra;
+          productId = int.tryParse(extra.id);
+        } else if (extra is int) {
+          productId = extra;
+        } else if (extra is String) {
+          productId = int.tryParse(extra);
+        }
+
+        return ProductDetailsScreen(
+          productId: productId ?? 1,
+          initialProduct: initialProduct,
+        );
+      },
     ),
     _r(
       name: Routes.cart.name,
       path: Routes.cart.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, __) => const CartScreen(),
     ),
     _r(
       name: Routes.confirmOrder.name,
@@ -189,7 +227,7 @@ final GoRouter appRouter = GoRouter(
     _r(
       name: Routes.orderDetails.name,
       path: Routes.orderDetails.path,
-      builder: (_, __) => const SizedBox(),
+      builder: (_, __) => const OrdersScreen(),
     ),
     _r(
       name: Routes.language.name,
@@ -243,3 +281,5 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 );
+
+GoRouter appRouter = createAppRouter();

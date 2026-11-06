@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otlob/shared/cart/cart_helper.dart';
 
 export 'package:otlob/shared/products/domain/model/product_item.dart';
 import 'package:otlob/shared/products/domain/model/product_item.dart';
@@ -161,7 +162,19 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: onAddToCart,
+                        onTap: () {
+                          if (onAddToCart != null) {
+                            onAddToCart!();
+                          } else {
+                            final int productId = int.tryParse(product.id) ?? 1;
+                            addProductToCartHelper(
+                              context: context,
+                              productId: productId,
+                              productName: product.title,
+                              quantity: 1,
+                            );
+                          }
+                        },
                         borderRadius: BorderRadius.circular(
                           isFilterStyle ? 8 : 999,
                         ),

@@ -14,13 +14,21 @@ extension NavigationExtension on BuildContext {
   // ── Push ──────────────────────────────────────────────────────────────────
 
   /// Push a named route on top of the current stack.
-  Future<T?> pushNamed<T>(Routes route, {Object? arguments}) =>
-      GoRouter.of(this).pushNamed<T>(route.name, extra: arguments);
+  Future<T?> pushNamed<T>(
+    Routes route, {
+    Object? arguments,
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(route.name, extra: extra ?? arguments);
 
   /// Replace the entire stack with [name]. Equivalent of the old
   /// `pushNamedAndRemoveUntil(name, (_) => false)`.
-  void goNamed(Routes route, {Object? arguments}) =>
-      GoRouter.of(this).goNamed(route.name, extra: arguments);
+  void goNamed(
+    Routes route, {
+    Object? arguments,
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(route.name, extra: extra ?? arguments);
 
   /// Push [name]; on back press, the user lands on the route named
   /// [keepUntilName] (the surviving route at the bottom of the stack).
@@ -30,15 +38,23 @@ extension NavigationExtension on BuildContext {
     Routes route, {
     required Routes keepUntilName,
     Object? arguments,
+    Object? extra,
   }) {
     final router = GoRouter.of(this);
     router.goNamed(keepUntilName.name);
-    return router.pushNamed<T>(route.name, extra: arguments);
+    return router.pushNamed<T>(route.name, extra: extra ?? arguments);
   }
 
   /// Replace the current route with [name].
-  Future<T?> pushReplacementNamed<T>(Routes route, {Object? arguments}) =>
-      GoRouter.of(this).pushReplacementNamed<T>(route.name, extra: arguments);
+  Future<T?> pushReplacementNamed<T>(
+    Routes route, {
+    Object? arguments,
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushReplacementNamed<T>(
+        route.name,
+        extra: extra ?? arguments,
+      );
 
   // ── Pop ───────────────────────────────────────────────────────────────────
 

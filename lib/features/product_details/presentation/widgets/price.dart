@@ -3,28 +3,39 @@ import 'package:otlob/core/res/color_manager.dart';
 import 'package:otlob/core/res/sizes_manager.dart';
 
 class Price extends StatelessWidget {
-  const Price({super.key});
+  const Price({
+    super.key,
+    this.price = 180.0,
+    this.currency = "EGP",
+  });
+
+  final double price;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
+    final priceStr = price % 1 == 0
+        ? price.toInt().toString()
+        : price.toStringAsFixed(2);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
           Text(
-            "180",
-            style: TextStyle(
+            priceStr,
+            style: const TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
               color: ColorM.primary,
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           Text(
-            "EGP",
-            style: TextStyle(
+            currency,
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: Color(0xFF9CA3AF),

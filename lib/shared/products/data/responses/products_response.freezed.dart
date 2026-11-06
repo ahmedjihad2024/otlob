@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'products_response.dart';
@@ -9,6 +9,7 @@ part of 'products_response.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ProductsResponseCopyWith<ProductsResponse> get copyWith => _$ProductsResponseCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.message, message) || other.message == message)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.data, data));
+  final _this = this as ProductsResponse;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsResponse&&(identical(other.success, _this.success) || other.success == _this.success)&&(identical(other.message, _this.message) || other.message == _this.message)&&(identical(other.pageIndex, _this.pageIndex) || other.pageIndex == _this.pageIndex)&&(identical(other.pageSize, _this.pageSize) || other.pageSize == _this.pageSize)&&(identical(other.count, _this.count) || other.count == _this.count)&&const DeepCollectionEquality().equals(other.data, _this.data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,message,pageIndex,pageSize,count,const DeepCollectionEquality().hash(data));
+int get hashCode {
+  final _this = this as ProductsResponse;
+  return Object.hash(runtimeType,_this.success,_this.message,_this.pageIndex,_this.pageSize,_this.count,const DeepCollectionEquality().hash(_this.data));
+}
 
 @override
 String toString() {
-  return 'ProductsResponse(success: $success, message: $message, pageIndex: $pageIndex, pageSize: $pageSize, count: $count, data: $data)';
+  final _this = this as ProductsResponse;
+  return 'ProductsResponse(success: ${_this.success}, message: ${_this.message}, pageIndex: ${_this.pageIndex}, pageSize: ${_this.pageSize}, count: ${_this.count}, data: ${_this.data})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ProductsResponseCopyWithImpl<$Res>
 /// Create a copy of ProductsResponse
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? message = null,Object? pageIndex = null,Object? pageSize = null,Object? count = null,Object? data = null,}) {
-  return _then(_self.copyWith(
+  return _then(ProductsResponse(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,pageIndex: null == pageIndex ? _self.pageIndex : pageIndex // ignore: cast_nullable_to_non_nullable
@@ -237,16 +243,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductsResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.message, message) || other.message == message)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.data, data));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductsResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.message, message) || other.message == message)&&(identical(other.pageIndex, pageIndex) || other.pageIndex == pageIndex)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,message,pageIndex,pageSize,count,const DeepCollectionEquality().hash(data));
+int get hashCode {
+    return Object.hash(runtimeType,success,message,pageIndex,pageSize,count,const DeepCollectionEquality().hash(data));
+}
 
 @override
 String toString() {
-  return 'ProductsResponse(success: $success, message: $message, pageIndex: $pageIndex, pageSize: $pageSize, count: $count, data: $data)';
+    return 'ProductsResponse(success: $success, message: $message, pageIndex: $pageIndex, pageSize: $pageSize, count: $count, data: $data)';
 }
 
 
@@ -306,16 +314,21 @@ $ProductItemDtoCopyWith<ProductItemDto> get copyWith => _$ProductItemDtoCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductItemDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.price, price) || other.price == price)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category));
+  final _this = this as ProductItemDto;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductItemDto&&const DeepCollectionEquality().equals(other.id, _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.description, _this.description) || other.description == _this.description)&&(identical(other.pictureUrl, _this.pictureUrl) || other.pictureUrl == _this.pictureUrl)&&(identical(other.price, _this.price) || other.price == _this.price)&&(identical(other.brandId, _this.brandId) || other.brandId == _this.brandId)&&(identical(other.brand, _this.brand) || other.brand == _this.brand)&&(identical(other.categoryId, _this.categoryId) || other.categoryId == _this.categoryId)&&(identical(other.category, _this.category) || other.category == _this.category));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,description,pictureUrl,price,brandId,brand,categoryId,category);
+int get hashCode {
+  final _this = this as ProductItemDto;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.id),_this.name,_this.description,_this.pictureUrl,_this.price,_this.brandId,_this.brand,_this.categoryId,_this.category);
+}
 
 @override
 String toString() {
-  return 'ProductItemDto(id: $id, name: $name, description: $description, pictureUrl: $pictureUrl, price: $price, brandId: $brandId, brand: $brand, categoryId: $categoryId, category: $category)';
+  final _this = this as ProductItemDto;
+  return 'ProductItemDto(id: ${_this.id}, name: ${_this.name}, description: ${_this.description}, pictureUrl: ${_this.pictureUrl}, price: ${_this.price}, brandId: ${_this.brandId}, brand: ${_this.brand}, categoryId: ${_this.categoryId}, category: ${_this.category})';
 }
 
 
@@ -344,7 +357,7 @@ class _$ProductItemDtoCopyWithImpl<$Res>
 /// Create a copy of ProductItemDto
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? description = freezed,Object? pictureUrl = null,Object? price = null,Object? brandId = freezed,Object? brand = null,Object? categoryId = freezed,Object? category = null,}) {
-  return _then(_self.copyWith(
+  return _then(ProductItemDto(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as dynamic,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -521,16 +534,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductItemDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.price, price) || other.price == price)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductItemDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.price, price) || other.price == price)&&(identical(other.brandId, brandId) || other.brandId == brandId)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.category, category) || other.category == category));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,description,pictureUrl,price,brandId,brand,categoryId,category);
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,description,pictureUrl,price,brandId,brand,categoryId,category);
+}
 
 @override
 String toString() {
-  return 'ProductItemDto(id: $id, name: $name, description: $description, pictureUrl: $pictureUrl, price: $price, brandId: $brandId, brand: $brand, categoryId: $categoryId, category: $category)';
+    return 'ProductItemDto(id: $id, name: $name, description: $description, pictureUrl: $pictureUrl, price: $price, brandId: $brandId, brand: $brand, categoryId: $categoryId, category: $category)';
 }
 
 
@@ -593,16 +608,21 @@ $BrandDtoCopyWith<BrandDto> get copyWith => _$BrandDtoCopyWithImpl<BrandDto>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BrandDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name));
+  final _this = this as BrandDto;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BrandDto&&const DeepCollectionEquality().equals(other.id, _this.id)&&(identical(other.name, _this.name) || other.name == _this.name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name);
+int get hashCode {
+  final _this = this as BrandDto;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.id),_this.name);
+}
 
 @override
 String toString() {
-  return 'BrandDto(id: $id, name: $name)';
+  final _this = this as BrandDto;
+  return 'BrandDto(id: ${_this.id}, name: ${_this.name})';
 }
 
 
@@ -631,7 +651,7 @@ class _$BrandDtoCopyWithImpl<$Res>
 /// Create a copy of BrandDto
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,}) {
-  return _then(_self.copyWith(
+  return _then(BrandDto(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as dynamic,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,
@@ -794,16 +814,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BrandDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _BrandDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name);
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name);
+}
 
 @override
 String toString() {
-  return 'BrandDto(id: $id, name: $name)';
+    return 'BrandDto(id: $id, name: $name)';
 }
 
 
@@ -859,16 +881,21 @@ $CategoryDtoCopyWith<CategoryDto> get copyWith => _$CategoryDtoCopyWithImpl<Cate
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.emoji, emoji) || other.emoji == emoji));
+  final _this = this as CategoryDto;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDto&&const DeepCollectionEquality().equals(other.id, _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.pictureUrl, _this.pictureUrl) || other.pictureUrl == _this.pictureUrl)&&(identical(other.emoji, _this.emoji) || other.emoji == _this.emoji));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,pictureUrl,emoji);
+int get hashCode {
+  final _this = this as CategoryDto;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.id),_this.name,_this.pictureUrl,_this.emoji);
+}
 
 @override
 String toString() {
-  return 'CategoryDto(id: $id, name: $name, pictureUrl: $pictureUrl, emoji: $emoji)';
+  final _this = this as CategoryDto;
+  return 'CategoryDto(id: ${_this.id}, name: ${_this.name}, pictureUrl: ${_this.pictureUrl}, emoji: ${_this.emoji})';
 }
 
 
@@ -897,7 +924,7 @@ class _$CategoryDtoCopyWithImpl<$Res>
 /// Create a copy of CategoryDto
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? pictureUrl = freezed,Object? emoji = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(CategoryDto(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as dynamic,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,pictureUrl: freezed == pictureUrl ? _self.pictureUrl : pictureUrl // ignore: cast_nullable_to_non_nullable
@@ -1064,16 +1091,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.emoji, emoji) || other.emoji == emoji));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryDto&&const DeepCollectionEquality().equals(other.id, id)&&(identical(other.name, name) || other.name == name)&&(identical(other.pictureUrl, pictureUrl) || other.pictureUrl == pictureUrl)&&(identical(other.emoji, emoji) || other.emoji == emoji));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,pictureUrl,emoji);
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(id),name,pictureUrl,emoji);
+}
 
 @override
 String toString() {
-  return 'CategoryDto(id: $id, name: $name, pictureUrl: $pictureUrl, emoji: $emoji)';
+    return 'CategoryDto(id: $id, name: $name, pictureUrl: $pictureUrl, emoji: $emoji)';
 }
 
 

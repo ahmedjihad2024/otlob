@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/network/error_handler/failure.dart';
+import 'package:otlob/core/network/failure_message.dart';
 import 'package:otlob/core/res/sizes_manager.dart';
 import 'package:otlob/core/res/gen/assets.gen.dart';
 import 'package:otlob/core/res/color_manager.dart';
@@ -13,6 +15,7 @@ import 'package:otlob/core/validation/field_rules.dart';
 import 'package:otlob/core/extensions/navigation_extension.dart';
 import 'package:otlob/features/sign_in/data/request/request.dart';
 import 'package:otlob/features/sign_in/domain/usecase/sign_in_usecase.dart';
+import 'package:otlob/features/sign_in/presentation/cubit/sign_in_cubit.dart';
 import 'package:otlob/features/sign_up/presentation/widgets/app_checkbox.dart';
 import 'package:otlob/features/sign_up/presentation/widgets/labeled_field.dart';
 import 'package:otlob/features/sign_up/presentation/widgets/or_divider.dart';
@@ -46,161 +49,119 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  Future<void> _handleSignIn() async {
-    sl<LoadingManager>().show();
-    final error = await validateOnSubmit([
-      // 1. Email
-      SubmitField(
-        value: _emailController.text,
-        focusNode: _emailFocus,
-        rule: Rules.all([
-          Rules.required('Please enter your email'),
-          Rules.email('Please enter a valid email address'),
-        ]),
-      ),
-
-      // 2. Password
-      SubmitField(
-        value: _passwordController.text,
-        focusNode: _passwordFocus,
-        rule: Rules.all([
-          Rules.required('Please enter your password'),
-          Rules.minLength(6, 'Password must be at least 6 characters'),
-        ]),
-      ),
-    ]);
-
-    if (error != null) {
-      sl<LoadingManager>().hide();
-      sl<SnackbarHelper>().showMessage(error, ErrorMessage.snackBar);
-      return;
-    }
-
-    final result = await sl<SignInUseCase>().execute(
-      SignInRequest(
-        email: _emailController.text,
-        password: _passwordController.text,
-      ),
-    );
-
-    sl<LoadingManager>().hide();
-
-    await result.fold(
-      (l) async => sl<SnackbarHelper>().showMessage(l.message, ErrorMessage.snackBar),
-      (r) async {
-        await sl<StorageService>().setMap("user_name", {
-          "name" : r.displayName,
-        });
-        await sl<StorageService>().setToken(r.token);
-        if (mounted) {
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<SignInCubit, SignInState>(
+      listener: (context, state) {
+        if (state is Success) {
           context.goNamed(Routes.home);
         }
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            left: SizeM.pagePadding,
-            right: SizeM.pagePadding,
-            top: 40,
-            bottom: SizeM.pagePadding,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hi, Wecome Back! 👋',
-                style: GoogleFonts.manrope(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                  height: 34.15 / 25,
-                ),
-              ),
-              Text(
-                'Hello again, you’ve been missed!',
-                style: GoogleFonts.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: ColorM.muted,
-                  height: 19.12 / 14,
-                ),
-              ),
-              const SizedBox(height: 56),
-              LabeledField(
-                label: 'Email',
-                hint: 'Enter your email',
-                controller: _emailController,
-                focusNode: _emailFocus,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 15),
-              LabeledField(
-                label: 'Password',
-                hint: 'Please Enter Your Password',
-                controller: _passwordController,
-                focusNode: _passwordFocus,
-                obscureText: _obscurePassword,
-                suffix: IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    surfaceTintColor: Colors.transparent,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              left: SizeM.pagePadding,
+              right: SizeM.pagePadding,
+              top: 40,
+              bottom: SizeM.pagePadding,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hi, Wecome Back! 👋',
+                  style: GoogleFonts.manrope(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    height: 34.15 / 25,
                   ),
-                  onPressed: () {
-                    setState(() => _obscurePassword = !_obscurePassword);
+                ),
+                Text(
+                  'Hello again, you’ve been missed!',
+                  style: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ColorM.muted,
+                    height: 19.12 / 14,
+                  ),
+                ),
+                const SizedBox(height: 56),
+                LabeledField(
+                  label: 'Email',
+                  hint: 'Enter your email',
+                  controller: _emailController,
+                  focusNode: _emailFocus,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 15),
+                LabeledField(
+                  label: 'Password',
+                  hint: 'Please Enter Your Password',
+                  controller: _passwordController,
+                  focusNode: _passwordFocus,
+                  obscureText: _obscurePassword,
+                  suffix: IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.svg.eyeFill.path,
+                      width: 18,
+                      height: 18,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 31),
+                _RememberForgotRow(
+                  rememberMe: _rememberMe,
+                  onRememberChanged: (value) {
+                    setState(() => _rememberMe = value);
                   },
-                  padding: EdgeInsets.zero,
-                  visualDensity: VisualDensity.compact,
-                  icon: SvgPicture.asset(
-                    Assets.svg.eyeFill.path,
-                    width: 18,
-                    height: 18,
-                  ),
+                  onForgotPassword: () {},
                 ),
-              ),
-              const SizedBox(height: 31),
-              _RememberForgotRow(
-                rememberMe: _rememberMe,
-                onRememberChanged: (value) {
-                  setState(() => _rememberMe = value);
-                },
-                onForgotPassword: () {},
-              ),
-              const SizedBox(height: 31),
-              PrimaryButton(
-                label: 'Sign In',
-                onPressed: _handleSignIn,
-              ),
-              const SizedBox(height: 22),
-              const OrDivider(),
-              const SizedBox(height: 22),
-              Row(
-                children: [
-                  Expanded(
-                    child: SocialButton(
-                      iconAsset: Assets.svg.github.path,
-                      label: 'GitHub',
-                      onPressed: () {},
+                const SizedBox(height: 31),
+                PrimaryButton(label: 'Sign In', onPressed: (){
+                  context.read<SignInCubit>().signIn(
+                    _emailController.text,
+                    _passwordController.text,
+                    _emailFocus,
+                    _passwordFocus,
+                  );
+                }),
+                const SizedBox(height: 22),
+                const OrDivider(),
+                const SizedBox(height: 22),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SocialButton(
+                        iconAsset: Assets.svg.github.path,
+                        label: 'GitHub',
+                        onPressed: () {},
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: SocialButton(
-                      iconAsset: Assets.svg.gitlab.path,
-                      label: 'GitLab',
-                      onPressed: () {},
+                    const SizedBox(width: 13),
+                    Expanded(
+                      child: SocialButton(
+                        iconAsset: Assets.svg.gitlab.path,
+                        label: 'GitLab',
+                        onPressed: () {},
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 48),
-              const _LoginPrompt(),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 48),
+                const _LoginPrompt(),
+              ],
+            ),
           ),
         ),
       ),

@@ -20,12 +20,24 @@ import 'package:otlob/features/sign_up/data/data_source/sign_up_remote_data_sour
 import 'package:otlob/features/sign_up/data/repository/sign_up_repository_impl.dart';
 import 'package:otlob/features/sign_up/domain/repository/sign_up_repository_abs.dart';
 import 'package:otlob/features/sign_up/domain/usecase/sign_up_usecase.dart';
+import 'package:otlob/shared/cart/data/api/cart_api_service.dart';
+import 'package:otlob/shared/cart/data/data_source/cart_remote_data_source.dart';
+import 'package:otlob/shared/cart/data/repository/cart_repository_impl.dart';
+import 'package:otlob/shared/cart/domain/repository/cart_repository_abs.dart';
+import 'package:otlob/shared/cart/domain/usecase/get_basket_usecase.dart';
+import 'package:otlob/shared/cart/domain/usecase/update_basket_item_usecase.dart';
+import 'package:otlob/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:otlob/features/orders/presentation/cubit/orders_cubit.dart';
+import 'package:otlob/features/explore_products/presentation/cubit/cubit/explor_products_cubit_cubit.dart';
+import 'package:otlob/features/home/presentation/cubit/home_cubit.dart';
+import 'package:otlob/features/product_details/presentation/cubit/product_details_cubit.dart';
 import 'package:otlob/shared/products/data/api/products_api_service.dart';
 import 'package:otlob/shared/products/data/data_source/products_remote_data_source.dart';
 import 'package:otlob/shared/products/data/repository/products_repository_impl.dart';
 import 'package:otlob/shared/products/domain/repository/products_repository_abs.dart';
 import 'package:otlob/shared/products/domain/usecase/get_brands_usecase.dart';
 import 'package:otlob/shared/products/domain/usecase/get_categories_usecase.dart';
+import 'package:otlob/shared/products/domain/usecase/get_product_by_id_usecase.dart';
 import 'package:otlob/shared/products/domain/usecase/get_products_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,6 +87,9 @@ Future<void> setupServiceLocator() async {
   );
   sl.registerLazySingleton<GetCategoriesUseCase>(
     () => GetCategoriesUseCase(sl<ProductsRepositoryAbs>()),
+  );
+  sl.registerLazySingleton<GetProductByIdUseCase>(
+    () => GetProductByIdUseCase(sl<ProductsRepositoryAbs>()),
   );
 
   // ─── Home Feature ───────────────────────────────────────────────────────────
@@ -127,5 +142,62 @@ Future<void> setupServiceLocator() async {
   // Use Cases
   sl.registerLazySingleton<SignInUseCase>(
     () => SignInUseCase(sl<SignInRepositoryAbs>()),
+  );
+
+  // ─── Shared Cart / Basket Feature ──────────────────────────────────────────
+  // API (Retrofit)
+  sl.registerLazySingleton<CartApiService>(
+    () => CartApiService(sl<Dio>()),
+  );
+
+  // Data Source (Redirects to API)
+  sl.registerLazySingleton<CartRemoteDataSource>(
+    () => CartRemoteDataSourceImpl(sl<CartApiService>()),
+  );
+
+  // Repository
+  sl.registerLazySingleton<CartRepositoryAbs>(
+    () => CartRepositoryImpl(sl<CartRemoteDataSource>()),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton<GetBasketUseCase>(
+    () => GetBasketUseCase(sl<CartRepositoryAbs>()),
+  );
+  sl.registerLazySingleton<UpdateBasketItemUseCase>(
+    () => UpdateBasketItemUseCase(sl<CartRepositoryAbs>()),
+  );
+
+  // Cubit
+  sl.registerLazySingleton<CartCubit>(
+    () => CartCubit(
+      sl<GetBasketUseCase>(),
+      sl<UpdateBasketItemUseCase>(),
+    ),
+  );
+
+  // ─── Home Feature ───────────────────────────────────────────────────────────
+  // Cubit
+  sl.registerFactory<HomeCubit>(
+    () => HomeCubit(
+      sl<GetProductsUseCase>(),
+      sl<GetBrandsUseCase>(),
+      sl<GetCategoriesUseCase>(),
+    ),
+  );
+
+  // ─── Orders Feature ────────────────────────────────────────────────────────
+  // Cubit
+  sl.registerFactory<OrdersCubit>(() => OrdersCubit());
+
+  // ─── Product Details Feature ────────────────────────────────────────────────
+  // Cubit
+  sl.registerFactory<ProductDetailsCubit>(
+    () => ProductDetailsCubit(sl<GetProductByIdUseCase>()),
+  );
+
+  // ─── Explore Products Feature ───────────────────────────────────────────────
+  sl.registerFactory<ExplorProductsCubitCubit>(
+    () => ExplorProductsCubitCubit(sl<GetProductsUseCase>()),
   );
 }

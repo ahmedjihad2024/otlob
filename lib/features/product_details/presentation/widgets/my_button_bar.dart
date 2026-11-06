@@ -13,7 +13,7 @@ class MyButtonBar extends StatelessWidget {
   });
 
   final int quantity;
-  final int unitPrice;
+  final num unitPrice;
   final VoidCallback? onDecrease;
   final VoidCallback? onIncrease;
   final VoidCallback? onAddToCart;
@@ -21,6 +21,8 @@ class MyButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final total = unitPrice * quantity;
+    final totalStr =
+        total % 1 == 0 ? total.toInt().toString() : total.toStringAsFixed(2);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -113,7 +115,7 @@ class MyButtonBar extends StatelessWidget {
                 fixedSize: const Size.fromHeight(56),
               ),
               child: Text(
-                "Add to cart · $total EGP",
+                "Add to cart · $totalStr EGP",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15,

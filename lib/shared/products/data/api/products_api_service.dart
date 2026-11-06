@@ -15,6 +15,12 @@ abstract class ProductsApiService {
     @Queries() Map<String, dynamic> queryParams,
   );
 
+  /// GET /api/Products/:id
+  @GET('/api/Products/{id}')
+  Future<ProductItemDto> getProductById(
+    @Path('id') int id,
+  );
+
   /// GET /api/Products/brands
   @GET('/api/Products/brands')
   Future<List<BrandDto>> getBrands();

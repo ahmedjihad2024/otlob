@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:otlob/shared/cart/cart_helper.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/extensions/navigation_extension.dart';
-import 'package:otlob/core/network/error_handler/failure.dart';
 import 'package:otlob/core/ui_kit/customized_smart_refresh.dart';
-import 'package:otlob/shared/products/data/request/get_products_request.dart';
-import 'package:otlob/shared/products/domain/usecase/get_products_usecase.dart';
+import 'package:otlob/features/explore_products/presentation/cubit/cubit/explor_products_cubit_cubit.dart';
 import 'package:otlob/shared/widgets/product_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -29,7 +29,7 @@ class ExploreProductsArgs {
   });
 }
 
-class ExploreProductsScreen extends StatefulWidget {
+class ExploreProductsScreen extends StatelessWidget {
   const ExploreProductsScreen({
     super.key,
     this.title = 'Products',
@@ -42,103 +42,70 @@ class ExploreProductsScreen extends StatefulWidget {
   final int? id;
 
   @override
-  State<ExploreProductsScreen> createState() => _ExploreProductsScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<ExplorProductsCubitCubit>()
+        ..configure(
+          brandId: explorType == ExplorType.brands ? id : null,
+          categoryId: explorType == ExplorType.categories ? id : null,
+        )
+        ..getProducts(refresh: true),
+      child: _ExploreProductsView(title: title),
+    );
+  }
 }
 
-class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
+class _ExploreProductsView extends StatefulWidget {
+  const _ExploreProductsView({required this.title});
+
+  final String title;
+
+  @override
+  State<_ExploreProductsView> createState() => _ExploreProductsViewState();
+}
+
+class _ExploreProductsViewState extends State<_ExploreProductsView> {
   final ValueNotifier<bool> isFilterVisible = ValueNotifier<bool>(true);
   final TextEditingController _searchController = TextEditingController();
   final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
-  final GetProductsUseCase _getProductsUseCase = sl<GetProductsUseCase>();
 
   Timer? _debounceTimer;
-  int selectedSortIndex = 0;
-  bool isLoading = true;
-  String? errorMessage;
-  List<ProductItem> products = [];
-
-  int currentPage = 0;
-
-  String? _getSortQuery(int sortIndex) {
-    switch (sortIndex) {
-      case 1:
-        return 'price';
-      case 2:
-        return 'price';
-      case 3:
-        return 'name';
-      default:
-        return null;
-    }
-  }
-
-  Future<void> getProducts({bool refresh = false}) async {
-    if (refresh) {
-      setState(() {
-        currentPage = 0;
-        isLoading = true;
-        errorMessage = null;
-      });
-    }
-
-    final request = GetProductsRequest(
-      pageIndex: ++currentPage,
-      pageSize: 20,
-      brandId: widget.explorType == ExplorType.brands ? widget.id : null,
-      categoryId: widget.explorType == ExplorType.categories ? widget.id : null,
-      sort: _getSortQuery(selectedSortIndex),
-      search: _searchController.text.trim().isNotEmpty
-          ? _searchController.text.trim()
-          : null,
-    );
-
-    final result = await _getProductsUseCase.execute(request);
-
-    if (!mounted) return;
-
-    result.fold(
-      (failure) {
-        if (!refresh) {
-          --currentPage;
-          _refreshController.loadFailed();
-        } else {
-          setState(() {
-            isLoading = false;
-            errorMessage = failure.message;
-          });
-        }
-      },
-      (data) {
-        setState(() {
-          isLoading = false;
-          if (refresh) {
-            products = data;
-            _refreshController.refreshCompleted();
-          } else {
-            products = [...products, ...data];
-            if (data.isEmpty)
-              _refreshController.loadNoData();
-            else
-              _refreshController.loadComplete();
-          }
-        });
-      },
-    );
-  }
 
   void _onSearchChanged(String query) {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      getProducts(refresh: true);
+      context.read<ExplorProductsCubitCubit>().search(query);
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getProducts(refresh: true);
+  Future<void> _onRefresh() async {
+    final outcome = await context.read<ExplorProductsCubitCubit>().getProducts(
+      refresh: true,
+    );
+    if (!mounted) return;
+
+    if (outcome == ExploreLoadOutcome.failed) {
+      _refreshController.refreshFailed();
+    } else {
+      _refreshController.refreshCompleted();
+      _refreshController.resetNoData();
+    }
+  }
+
+  Future<void> _onLoading() async {
+    final outcome = await context.read<ExplorProductsCubitCubit>().getProducts();
+    if (!mounted) return;
+
+    switch (outcome) {
+      case ExploreLoadOutcome.failed:
+        _refreshController.loadFailed();
+      case ExploreLoadOutcome.noData:
+        _refreshController.loadNoData();
+      case ExploreLoadOutcome.success:
+        _refreshController.loadComplete();
+    }
   }
 
   @override
@@ -180,35 +147,49 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
                       shrinkVertically(curve: Curves.fastEaseInToSlowEaseOut),
                   enterDuration: const Duration(milliseconds: 300),
                   exitDuration: const Duration(milliseconds: 250),
-                  child: SortChips(
-                    selectedIndex: selectedSortIndex,
-                    onSelected: (index) {
-                      if (selectedSortIndex != index) {
-                        setState(() => selectedSortIndex = index);
-                        getProducts();
-                      }
+                  child: BlocSelector<
+                    ExplorProductsCubitCubit,
+                    ExplorProductsCubitState,
+                    int
+                  >(
+                    selector: (state) => state.selectedSortIndex,
+                    builder: (context, selectedSortIndex) {
+                      return SortChips(
+                        selectedIndex: selectedSortIndex,
+                        onSelected: (index) {
+                          context.read<ExplorProductsCubitCubit>().changeSort(
+                            index,
+                          );
+                        },
+                      );
                     },
                   ),
                 );
               },
             ),
-            Expanded(child: _buildBody()),
+            Expanded(
+              child:
+                  BlocBuilder<ExplorProductsCubitCubit, ExplorProductsCubitState>(
+                    builder: (context, state) => _buildBody(state),
+                  ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(ExplorProductsCubitState state) {
     const primaryColor = Color(0xFFFF5C39);
 
-    if (isLoading) {
+    if (state.status == ExploreProductsStatus.loading ||
+        state.status == ExploreProductsStatus.initial) {
       return const Center(
         child: CircularProgressIndicator(color: primaryColor),
       );
     }
 
-    if (errorMessage != null) {
+    if (state.status == ExploreProductsStatus.failure) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -222,7 +203,7 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                errorMessage!,
+                state.errorMessage ?? 'Something went wrong',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 15,
@@ -232,7 +213,11 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: getProducts,
+                onPressed: () {
+                  context.read<ExplorProductsCubitCubit>().getProducts(
+                    refresh: true,
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   shape: RoundedRectangleBorder(
@@ -254,11 +239,11 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
       );
     }
 
-    if (products.isEmpty) {
+    if (state.products.isEmpty) {
       return CustomizedSmartRefresh(
         controller: _refreshController,
-        onRefresh: () => getProducts(refresh: true),
-        onLoading: getProducts,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
         enableLoading: true,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -308,8 +293,8 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
 
     return CustomizedSmartRefresh(
       controller: _refreshController,
-      onRefresh: () => getProducts(refresh: true),
-      onLoading: getProducts,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
       enableLoading: true,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -318,7 +303,7 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Text(
-                "${products.length} items",
+                "${state.products.length} items",
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -337,17 +322,25 @@ class _ExploreProductsScreenState extends State<ExploreProductsScreen> {
                 childAspectRatio: 171 / 244,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
-                final product = products[index];
+                final product = state.products[index];
                 return ProductCard(
                   product: product,
                   badgeText: product.brand,
                   isFilterStyle: true,
                   onTap: () {
-                    context.pushNamed(Routes.productDetails);
+                    context.pushNamed(Routes.productDetails, arguments: product);
                   },
-                  onAddToCart: () {},
+                  onAddToCart: () {
+                    final int productId = int.tryParse(product.id) ?? 1;
+                    addProductToCartHelper(
+                      context: context,
+                      productId: productId,
+                      productName: product.title,
+                      quantity: 1,
+                    );
+                  },
                 );
-              }, childCount: products.length),
+              }, childCount: state.products.length),
             ),
           ),
         ],

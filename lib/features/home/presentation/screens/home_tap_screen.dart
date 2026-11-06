@@ -1,149 +1,204 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:otlob/core/di/dependency_injection.dart';
 import 'package:otlob/core/extensions/navigation_extension.dart';
-import 'package:otlob/core/usecase/base.dart';
+import 'package:otlob/core/res/color_manager.dart';
 import 'package:otlob/features/explore_products/presentation/screens/explore_products_screen.dart';
+import 'package:otlob/features/home/presentation/cubit/home_cubit.dart';
+import 'package:otlob/features/home/presentation/cubit/home_state.dart';
 import 'package:otlob/features/home/presentation/widgets/app_bar.dart';
 import 'package:otlob/features/home/presentation/widgets/brands_section.dart';
 import 'package:otlob/features/home/presentation/widgets/categories_section.dart';
 import 'package:otlob/features/home/presentation/widgets/hero_banner.dart';
 import 'package:otlob/features/home/presentation/widgets/popular_section.dart';
-import 'package:otlob/shared/products/data/request/get_products_request.dart';
-import 'package:otlob/shared/products/domain/usecase/get_brands_usecase.dart';
-import 'package:otlob/shared/products/domain/usecase/get_categories_usecase.dart';
-import 'package:otlob/shared/widgets/product_card.dart';
+import 'package:otlob/shared/cart/cart_helper.dart';
 
-import 'package:otlob/shared/products/domain/usecase/get_products_usecase.dart';
-
-class HomeTapScreen extends StatefulWidget {
+class HomeTapScreen extends StatelessWidget {
   const HomeTapScreen({super.key});
 
   @override
-  State<HomeTapScreen> createState() => _HomeTapScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<HomeCubit>()..getHomeData(),
+      child: const _HomeTapView(),
+    );
+  }
 }
 
-class _HomeTapScreenState extends State<HomeTapScreen>
-    with AutomaticKeepAliveClientMixin {
-  List<ProductItem> products = [];
-  List<BrandItem> brands = [];
-  List<CategoryItem> categories = [];
-
-  bool isLoading = false;
-  final GetProductsUseCase _getProductsUseCase = sl<GetProductsUseCase>();
-  final GetBrandsUseCase _getBrandsUseCase = sl<GetBrandsUseCase>();
-  final GetCategoriesUseCase _getCategoriesUseCase = sl<GetCategoriesUseCase>();
-
-  Future<void> getData() async {
-    setState(() => isLoading = true);
-    final results = await Future.wait([
-      _getProductsUseCase.execute(const GetProductsRequest(pageSize: 4)),
-      _getBrandsUseCase.execute(const NoParams()),
-      _getCategoriesUseCase.execute(const NoParams()),
-    ]);
-    if (mounted) {
-      isLoading = false;
-
-      results[0].fold((_) {}, (r) => products = r as List<ProductItem>);
-      results[1].fold((_) {}, (r) => brands = r as List<BrandItem>);
-      results[2].fold((_) {}, (r) => categories = r as List<CategoryItem>);
-
-      setState(() {});
-    }
-  }
+class _HomeTapView extends StatefulWidget {
+  const _HomeTapView();
 
   @override
-  void initState() {
-    super.initState();
+  State<_HomeTapView> createState() => _HomeTapViewState();
+}
 
-    getData();
-  }
-
+class _HomeTapViewState extends State<_HomeTapView>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return isLoading
-        ? Center(child: CircularProgressIndicator())
-        : SafeArea(
-            bottom: false,
-            child: RefreshIndicator(
-              onRefresh: getData,
-              color: const Color(0xFFFF6B4A),
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 12),
-                    MyAppBar(
-                      userName: "Ahmed Jihad",
-                      location: "14 Tahrir Square, Cairo",
-                      isThereIsNotifications: true,
-                      onTapNotification: () {},
-                      onTapLocation: () {},
-                      onTapSearch: () {
-                        context.pushNamed(
-                          Routes.products,
-                          arguments: const ExploreProductsArgs(
-                            title: "Search Products",
-                          ),
-                        );
-                      },
-                      onTapFilter: () {},
+
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        if (state.status.isError && state.errorMessage != null) {
+          final hasData = state.products.isNotEmpty ||
+              state.brands.isNotEmpty ||
+              state.categories.isNotEmpty;
+          if (hasData) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: ColorM.danger,
+              ),
+            );
+          }
+        }
+      },
+      builder: (context, state) {
+        final hasAnyData = state.products.isNotEmpty ||
+            state.brands.isNotEmpty ||
+            state.categories.isNotEmpty;
+
+        if (state.status.isLoading && !hasAnyData) {
+          return const Center(
+            child: CircularProgressIndicator(color: ColorM.primary),
+          );
+        }
+
+        if (state.status.isError && !hasAnyData) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline_rounded,
+                    size: 52,
+                    color: ColorM.danger,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    state.errorMessage ?? 'Something went wrong',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0A192F),
                     ),
-                    const SizedBox(height: 20),
-                    HeroBanner(onTap: () {}),
-                    const SizedBox(height: 24),
-                    CategoriesSection(
-                      categories: categories.isEmpty
-                          ? CategoriesSection.defaultCategories
-                          : categories,
-                      onSelectCategory: (category) {
-                        context.pushNamed(
-                          Routes.products,
-                          arguments: ExploreProductsArgs(
-                            title: category.name,
-                            explorType: ExplorType.categories,
-                            id: int.tryParse(category.id) ?? 1,
-                          ),
-                        );
-                      },
-                      onSeeAll: () {
-                      },
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => context.read<HomeCubit>().getHomeData(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorM.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    BrandsSection(
-                      brands: brands.isEmpty
-                          ? BrandsSection.defaultBrands
-                          : brands,
-                      onSelectBrand: (brand) {
-                        context.pushNamed(
-                          Routes.products,
-                          arguments: ExploreProductsArgs(
-                            title: brand.name,
-                            explorType: ExplorType.brands,
-                            id: brand.id,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    PopularSection(
-                      products: products.isEmpty
-                          ? PopularSection.defaultProducts
-                          : products,
-                      onSelectProduct: (product) {
-                        context.pushNamed(Routes.productDetails);
-                      },
-                      onAddToCart: (product) {},
-                    ),
-                    const SizedBox(height: 32),
-                  ],
-                ),
+                    child: const Text('Try Again'),
+                  ),
+                ],
               ),
             ),
           );
+        }
+
+        return SafeArea(
+          bottom: false,
+          child: RefreshIndicator(
+            onRefresh: () =>
+                context.read<HomeCubit>().getHomeData(refresh: true),
+            color: ColorM.primary,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12),
+                  MyAppBar(
+                    userName: "Ahmed Jihad",
+                    location: "14 Tahrir Square, Cairo",
+                    isThereIsNotifications: true,
+                    onTapNotification: () {},
+                    onTapLocation: () {},
+                    onTapSearch: () {
+                      context.pushNamed(
+                        Routes.products,
+                        arguments: const ExploreProductsArgs(
+                          title: "Search Products",
+                        ),
+                      );
+                    },
+                    onTapFilter: () {},
+                  ),
+                  const SizedBox(height: 20),
+                  HeroBanner(onTap: () {}),
+                  const SizedBox(height: 24),
+                  CategoriesSection(
+                    categories: state.categories.isEmpty
+                        ? CategoriesSection.defaultCategories
+                        : state.categories,
+                    onSelectCategory: (category) {
+                      context.pushNamed(
+                        Routes.products,
+                        arguments: ExploreProductsArgs(
+                          title: category.name,
+                          explorType: ExplorType.categories,
+                          id: int.tryParse(category.id) ?? 1,
+                        ),
+                      );
+                    },
+                    onSeeAll: () {},
+                  ),
+                  const SizedBox(height: 24),
+                  BrandsSection(
+                    brands: state.brands.isEmpty
+                        ? BrandsSection.defaultBrands
+                        : state.brands,
+                    onSelectBrand: (brand) {
+                      context.pushNamed(
+                        Routes.products,
+                        arguments: ExploreProductsArgs(
+                          title: brand.name,
+                          explorType: ExplorType.brands,
+                          id: brand.id,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  PopularSection(
+                    products: state.products.isEmpty
+                        ? PopularSection.defaultProducts
+                        : state.products,
+                    onSelectProduct: (product) {
+                      context.pushNamed(
+                        Routes.productDetails,
+                        arguments: product,
+                      );
+                    },
+                    onAddToCart: (product) {
+                      final int productId = int.tryParse(product.id) ?? 1;
+                      addProductToCartHelper(
+                        context: context,
+                        productId: productId,
+                        productName: product.title,
+                        quantity: 1,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override

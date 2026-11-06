@@ -1,3 +1,5 @@
+import 'package:otlob/core/network/error_handler/error_handler.dart';
+
 sealed class Failure {
   const Failure();
 }
@@ -16,10 +18,13 @@ class NoInternetConnection extends Failure {
   const NoInternetConnection();
 }
 
-extension FailureMessage on Failure {
-  String get message => switch (this) {
-    ServerError(:final message) => message ?? 'Server Error',
-    UnexpectedError(:final message) => message ?? 'Unexpected Error',
-    NoInternetConnection() => 'No internet connection',
-  };
+class CustomDioLocalError extends Failure {
+  final LocalErrorType error;
+  const CustomDioLocalError({required this.error});
 }
+
+class CustomServerError extends Failure {
+  final ApiErrorType error;
+  const CustomServerError({required this.error});
+}
+

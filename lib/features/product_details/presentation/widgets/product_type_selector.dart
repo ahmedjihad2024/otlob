@@ -7,29 +7,29 @@ class ProductTypeSelector extends StatelessWidget {
     super.key,
     required this.selectedType,
     required this.onSelected,
+    this.types = const ["Cilantro", "Donuts"],
   });
 
   final int selectedType;
   final ValueChanged<int> onSelected;
+  final List<String> types;
 
   @override
   Widget build(BuildContext context) {
+    if (types.isEmpty) return const SizedBox.shrink();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: SizeM.pagePadding),
       scrollDirection: Axis.horizontal,
       child: Row(
         spacing: 8,
         children: [
-          ProductTypeCard(
-            text: "Cilantro",
-            isSelected: selectedType == 0,
-            onTap: () => onSelected(0),
-          ),
-          ProductTypeCard(
-            text: "Donuts",
-            isSelected: selectedType == 1,
-            onTap: () => onSelected(1),
-          ),
+          for (int i = 0; i < types.length; i++)
+            ProductTypeCard(
+              text: types[i],
+              isSelected: selectedType == i,
+              onTap: () => onSelected(i),
+            ),
         ],
       ),
     );
@@ -58,14 +58,17 @@ class ProductTypeCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
           color: isSelected ? const Color(0xFFFFF0ED) : const Color(0xFFF3F4F6),
+          border: Border.all(
+            color: isSelected ? ColorM.primary : Colors.transparent,
+            width: 1,
+          ),
         ),
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 11,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            letterSpacing: 0.275,
             color: isSelected ? ColorM.primary : const Color(0xFF6B7280),
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           ),
         ),
       ),

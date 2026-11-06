@@ -4,9 +4,9 @@ import 'package:otlob/core/network/base_response.dart';
 
 import 'failure.dart';
 
-Future<Either<Failure, R2>> fastHandler<R, R2>({
+Future<Either<Failure, T>> fastHandler<R, T>({
   required Future<R> Function() request,
-  required R2 Function(R response) mapper,
+  required T Function(R response) mapper,
 }) async {
   try {
     final response = await request();
@@ -27,47 +27,52 @@ extension ErrorHandler on Object {
 }
 
 Failure _handleDioException(DioException e) => switch (e.type) {
-  DioExceptionType.connectionError => NoInternetConnection(),
   DioExceptionType.badResponse => _handleBadResponse(e.response),
-  DioExceptionType.connectionTimeout ||
-  DioExceptionType.sendTimeout ||
-  DioExceptionType.receiveTimeout => ServerError(
-    message: 'Connection timed out. Please try again.',
+  DioExceptionType.connectionError => NoInternetConnection(),
+  DioExceptionType.connectionTimeout => CustomDioLocalError(
+    error: LocalErrorType.CONNECTION_TIMEOUT,
   ),
-  DioExceptionType.cancel => ServerError(message: 'Request was cancelled.'),
-  DioExceptionType.badCertificate => ServerError(
-    message: 'Invalid certificate from the server.',
+  DioExceptionType.sendTimeout => CustomDioLocalError(
+    error: LocalErrorType.SEND_TIMEOUT,
   ),
-  _ => ServerError(message: 'Something went wrong. Please try again.'),
+  DioExceptionType.receiveTimeout => CustomDioLocalError(
+    error: LocalErrorType.RECEIVE_TIMEOUT,
+  ),
+  DioExceptionType.transformTimeout => CustomDioLocalError(
+    error: LocalErrorType.TRANSFORM_TIMEOUT,
+  ),
+  DioExceptionType.cancel => CustomDioLocalError(error: LocalErrorType.CANCEL),
+  DioExceptionType.badCertificate => CustomDioLocalError(
+    error: LocalErrorType.BAD_CERTIFICATION,
+  ),
+  DioExceptionType.unknown => CustomDioLocalError(
+    error: LocalErrorType.UNKNOWN,
+  ),
 };
 
 Failure _handleBadResponse(Response? response) {
-  final message = _extractMessage(response?.data);
-  if (message != null) return ServerError(message: message);
-
   final status = response?.statusCode;
-  return ServerError(
-    message: switch (status) {
-      400 => 'Invalid data provided.',
-      401 => 'Please login again.',
-      403 => "You don't have access.",
-      404 => 'The requested resource does not exist.',
-      429 => 'Too many requests. Please try again later.',
-      != null && >= 500 => 'Something went wrong on our end.',
-      _ => 'An unknown error occurred.',
-    },
-  );
+
+  final message = _extractMessage(response?.data);
+  if (message == null) {
+    return ServerError(message: 'An unknown error occurred.');
+  }
+
+  final apiError = ApiErrorType.from(status, message);
+  return apiError != null
+      ? CustomServerError(error: apiError)
+      : ServerError(message: message);
 }
 
 /// Keys the backend may use to send the error message (by priority).
-/// Add or remove keys to match your backend.
 const _messageKeys = ['message', 'error', 'detail', 'title'];
 
 /// Finds the error message in any response shape:
 /// - "text"
 /// - {"message": "text"}
-/// - {"message": ["a", "b"]}   (validation errors)
-/// - {"error": {"message": "text"}}   (nested)
+/// - {"message": ["a", "b"]}
+/// - {"error": {"message": "text"}}
+/// - {"title": "...", "errors": {"Email": ["..."]}}  (validation errors)
 String? _extractMessage(dynamic data) {
   if (data is String) {
     final text = data.trim();
@@ -79,10 +84,52 @@ String? _extractMessage(dynamic data) {
     return parts.isEmpty ? null : parts.join('\n');
   }
   if (data is Map) {
+    // field validation errors first: they're more specific than "title"
+    final errors = data['errors'];
+    if (errors is Map) {
+      final message = _extractMessage(errors.values.toList());
+      if (message != null) return message;
+    }
     for (final key in _messageKeys) {
       final message = _extractMessage(data[key]);
       if (message != null) return message;
     }
   }
   return null;
+}
+
+enum LocalErrorType {
+  CONNECTION_TIMEOUT('Connection to the server timed out.'),
+  SEND_TIMEOUT('Request timed out while sending.'),
+  RECEIVE_TIMEOUT('Response timed out while receiving.'),
+  TRANSFORM_TIMEOUT('Response processing timed out.'),
+  CANCEL('Request was cancelled.'),
+  BAD_CERTIFICATION('Invalid certificate from the server.'),
+  UNKNOWN('Something went wrong. Please try again.');
+
+  final String message;
+  const LocalErrorType(this.message);
+}
+
+enum ApiErrorType {
+  USER_NOT_CONFIRMED(401, 'User is not confirmed.'),
+  UNAUTHORIZED(401, 'غير مصرح'),
+  EMAIL_TAKEN(400, 'An account with the given email already exists.'),
+  INCORRECT_CREDENTIALS(401, 'Incorrect username or password.'),
+  INVALID_CODE(400, 'Invalid code provided, please request a code again.'),
+  INVALID_REFRESH_TOKEN(400, 'Invalid Refresh Token');
+
+  final int statusCode;
+  final String message;
+  const ApiErrorType(this.statusCode, this.message);
+
+  static ApiErrorType? from(int? statusCode, String message) {
+    for (final e in values) {
+      if (e.statusCode == statusCode &&
+          e.message.toLowerCase() == message.toLowerCase()) {
+        return e;
+      }
+    }
+    return null;
+  }
 }

@@ -16,6 +16,10 @@ class StorageService extends StorageServiceBase {
   Future<void> setToken(String token)                        async => await _secureStorageService.setToken(token);
   Future<String?> getToken()                                 async => await _secureStorageService.token;
   Future<void> deleteToken()                                 async => await _secureStorageService.deleteToken();
+  Future<bool> hasToken()                                    async {
+    final t = await getToken();
+    return t != null && t.trim().isNotEmpty;
+  }
 
   // User Data
   Future<void> setSecureMap(Map<String, dynamic> data)       async => await _secureStorageService.setSecureMap(data);

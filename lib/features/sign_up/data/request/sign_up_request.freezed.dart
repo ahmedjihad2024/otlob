@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sign_up_request.dart';
@@ -9,6 +9,7 @@ part of 'sign_up_request.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $SignUpRequestCopyWith<SignUpRequest> get copyWith => _$SignUpRequestCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignUpRequest&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.password, password) || other.password == password));
+  final _this = this as SignUpRequest;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignUpRequest&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.password, _this.password) || other.password == _this.password));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayName,email,phoneNumber,password);
+int get hashCode {
+  final _this = this as SignUpRequest;
+  return Object.hash(runtimeType,_this.displayName,_this.email,_this.phoneNumber,_this.password);
+}
 
 @override
 String toString() {
-  return 'SignUpRequest(displayName: $displayName, email: $email, phoneNumber: $phoneNumber, password: $password)';
+  final _this = this as SignUpRequest;
+  return 'SignUpRequest(displayName: ${_this.displayName}, email: ${_this.email}, phoneNumber: ${_this.phoneNumber}, password: ${_this.password})';
 }
 
 
@@ -66,7 +72,7 @@ class _$SignUpRequestCopyWithImpl<$Res>
 /// Create a copy of SignUpRequest
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? displayName = null,Object? email = null,Object? phoneNumber = null,Object? password = null,}) {
-  return _then(_self.copyWith(
+  return _then(SignUpRequest(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -233,16 +239,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignUpRequest&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.password, password) || other.password == password));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignUpRequest&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.password, password) || other.password == password));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,displayName,email,phoneNumber,password);
+int get hashCode {
+    return Object.hash(runtimeType,displayName,email,phoneNumber,password);
+}
 
 @override
 String toString() {
-  return 'SignUpRequest(displayName: $displayName, email: $email, phoneNumber: $phoneNumber, password: $password)';
+    return 'SignUpRequest(displayName: $displayName, email: $email, phoneNumber: $phoneNumber, password: $password)';
 }
 
 

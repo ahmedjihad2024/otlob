@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:otlob/features/home/presentation/widgets/bottom_nav_bar.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:otlob/core/di/dependency_injection.dart';
+import 'package:otlob/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:otlob/features/cart/presentation/cubit/cart_state.dart';
+import 'package:otlob/features/cart/presentation/screens/cart_screen.dart';
 import 'package:otlob/features/explore/presentation/screens/explore_tab_screen.dart';
+import 'package:otlob/features/home/presentation/widgets/bottom_nav_bar.dart';
+import 'package:otlob/features/orders/presentation/screens/orders_screen.dart';
+
 import 'home_tap_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,13 +20,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<int> _currentNavIndex = ValueNotifier(0);
   late PageController _pageController;
-  final List<Widget> _taps = [
+
+  late final List<Widget> _taps = [
     const HomeTapScreen(),
     const ExploreTabScreen(),
-    Container(color: Colors.red.withValues(alpha: .4)),
-    Container(color: Colors.blue.withValues(alpha: .4)),
+    CartScreen(onExploreTap: () => _onTabSelected(1)),
+    const OrdersScreen(),
     Container(color: Colors.black.withValues(alpha: .4)),
   ];
+
+  void _onTabSelected(int index) {
+    _currentNavIndex.value = index;
+    _pageController.jumpToPage(index);
+  }
 
   @override
   void initState() {
@@ -37,27 +49,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      bottomNavigationBar: ValueListenableBuilder(
-        valueListenable: _currentNavIndex,
-        builder: (context, _, _) {
-          return HomeBottomNavBar(
-            currentIndex: _currentNavIndex.value,
-            cartCount: 0,
-            onTap: (index) {
-              _currentNavIndex.value = index;
-              _pageController.jumpToPage(index);
-            },
-          );
-        }
-      ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: _taps.length,
-        physics: NeverScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) =>
-            _taps[index],
+    return BlocProvider.value(
+      value: sl<CartCubit>()..loadBasket(),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFAFAFA),
+        bottomNavigationBar: BlocBuilder<CartCubit, CartState>(
+          builder: (context, cartState) {
+            final cartCount = context.read<CartCubit>().currentCount;
+
+            return ValueListenableBuilder(
+              valueListenable: _currentNavIndex,
+              builder: (context, currentIndex, _) {
+                return HomeBottomNavBar(
+                  currentIndex: currentIndex,
+                  cartCount: 0,
+                  onTap: _onTabSelected,
+                );
+              },
+            );
+          },
+        ),
+        body: PageView.builder(
+          controller: _pageController,
+          itemCount: _taps.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) => _taps[index],
+        ),
       ),
     );
   }
